@@ -36,6 +36,8 @@ const Navbar = () => {
         </Link>
         
         <div className={`hidden md:flex items-center gap-8 font-headline tracking-tighter uppercase font-black text-sm ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <Link to="/" className="text-white/70 hover:text-white transition-colors">{t('nav.home')}</Link>
+          
           <div 
             className="relative group"
             onMouseEnter={() => setIsMenuOpen(true)}
@@ -56,6 +58,7 @@ const Navbar = () => {
                   className={`absolute top-full ${isRTL ? 'right-0' : 'left-0'} w-[600px] bg-surface-container-high/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 mt-2 grid grid-cols-2 gap-4 shadow-2xl z-50`}
                 >
                   {categories.map((cat) => (
+                    
                     <Link 
                       key={cat.id}
                       to={`/catalog?category=${cat.id}`}
@@ -78,6 +81,7 @@ const Navbar = () => {
           </div>
           
           <Link to="/catalog" className="text-white/70 hover:text-white transition-colors">{t('nav.browse')}</Link>
+          
         </div>
 
         <div className={`flex items-center gap-6 text-primary ${isRTL ? 'flex-row-reverse' : ''}`}>
