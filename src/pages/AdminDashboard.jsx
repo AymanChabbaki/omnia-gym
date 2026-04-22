@@ -185,7 +185,7 @@ const AdminDashboard = () => {
                       </td>
                       {view === 'products' && (
                         <td className="p-4">
-                          <div className="text-secondary font-black">DH{item.price}</div>
+                          <div className="text-secondary font-black">{item.price} DH</div>
                           <div className="text-xs">{item.brand}</div>
                         </td>
                       )}

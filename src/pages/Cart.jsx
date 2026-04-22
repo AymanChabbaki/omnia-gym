@@ -48,7 +48,7 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="font-headline text-2xl font-black text-primary">DH{(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="font-headline text-2xl font-black text-primary">{(item.price * item.quantity).toFixed(2)} DH</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between mt-6">
