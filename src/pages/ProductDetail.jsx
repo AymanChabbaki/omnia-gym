@@ -125,7 +125,7 @@ const ProductDetail = () => {
               <span className="text-outline text-sm font-bold uppercase tracking-widest">({product.brand})</span>
             </motion.div>
 
-            <motion.div variants={fadeIn} className="text-4xl font-black tracking-tighter mb-8">${product.price}</motion.div>
+            <motion.div variants={fadeIn} className="text-4xl font-black tracking-tighter mb-8">DH{product.price}</motion.div>
             
             <motion.p variants={fadeIn} className="text-on-surface-variant text-lg leading-relaxed mb-10">
               {getLocalized(product, 'description')}

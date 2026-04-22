@@ -64,7 +64,7 @@ const ProductCard = ({ product }) => {
         </div>
         <p className="text-on-surface-variant mb-6 flex-grow text-sm leading-relaxed font-medium opacity-70">{getLocalized(product, 'description')}</p>
         <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <span className="text-3xl font-black text-white italic tracking-tighter">${product.price}</span>
+          <span className="text-3xl font-black text-white italic tracking-tighter">DH{product.price}</span>
           <button 
             onClick={() => addToCart(product)}
             className="p-4 bg-primary text-black rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-[0_10px_20px_rgba(244,255,198,0.2)]"

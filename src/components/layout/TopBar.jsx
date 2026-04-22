@@ -161,7 +161,7 @@ const TopBar = () => {
                         <img src={product.image} alt="" className="w-8 h-8 object-contain" />
                         <div className={isRTL ? 'text-right' : 'text-left'}>
                           <p className="text-[10px] font-black uppercase text-white truncate w-40">{product.name}</p>
-                          <p className="text-[8px] font-bold text-primary">${product.price}</p>
+                          <p className="text-[8px] font-bold text-primary">DH{product.price}</p>
                         </div>
                       </div>
                     ))}
