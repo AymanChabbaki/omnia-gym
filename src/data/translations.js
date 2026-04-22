@@ -77,7 +77,7 @@ export const translations = {
       viewBundles: "عرض الحزم",
       search: "ابحث في الرف",
       powerSearch: "بحث قوي...",
-      shippingPromo: "شحن مجاني للطلبات فوق 150 دولار",
+      shippingPromo: "شحن مجاني للطلبات فوق 150 DH",
       bestSellers: "الأكثر مبيعاً",
       engineered: "مصمم للأداء العالي",
       noProducts: "لم يتم العثور على منتجات تطابق بحثك",
