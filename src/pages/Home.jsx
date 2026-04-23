@@ -39,6 +39,9 @@ const Home = () => {
   const heroY = useTransform(smoothY, [0, 1080], [-20, 20]);
 
   useEffect(() => {
+    // Disable parallax on touch devices to prevent jitter
+    if ('ontouchstart' in window) return;
+
     const handleMouseMove = (e) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
@@ -88,7 +91,7 @@ const Home = () => {
             >
               <motion.h1 
                 variants={itemVariants}
-                className="font-headline font-black text-[3.5rem] md:text-[9rem] leading-[0.85] tracking-tighter uppercase mb-6 italic"
+                className="font-headline font-black text-[3rem] md:text-[9rem] leading-[0.85] tracking-tighter uppercase mb-6 italic"
               >
                 {t('home.heroTitle').split(' ').map((word, i) => i === 2 ? <span key={i} className="text-primary block">{word}</span> : word + ' ')}
               </motion.h1>
@@ -117,7 +120,7 @@ const Home = () => {
         {/* Huge Bottom Text Watermark */}
         <div className={`absolute bottom-4 ${isRTL ? 'left-8' : 'right-8'} pointer-events-none z-0 flex flex-col text-right select-none`}>
           <span className="font-headline font-black text-[12vw] md:text-[10vw] leading-[0.8] tracking-tight bleed-text uppercase italic whitespace-nowrap">OMNIA</span>
-          <span className="font-headline font-black text-[12vw] md:text-[10vw] leading-[0.8] tracking-tight bleed-text uppercase italic whitespace-nowrap">GYM</span>
+          <span className="font-headline font-black text-[12vw] md:text-[10vw] leading-[0.8] tracking-tight bleed-text uppercase italic whitespace-nowrap">SHOP</span>
         </div>
       </section>
 
@@ -149,10 +152,10 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Cinematic Video Section [NEW] */}
-      <section className="py-32 bg-surface overflow-hidden">
-        <div className="container mx-auto px-6">
-          <div className="relative group rounded-3xl overflow-hidden aspect-video shadow-[0_0_100px_rgba(244,255,198,0.1)]">
+      {/* Cinematic Video Section */}
+      <section className="py-16 md:py-32 bg-surface overflow-hidden">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="relative group rounded-2xl md:rounded-3xl overflow-hidden aspect-[9/16] md:aspect-video shadow-[0_0_100px_rgba(244,255,198,0.1)]">
             <video 
               autoPlay 
               muted 
@@ -162,17 +165,17 @@ const Home = () => {
             >
               <source src="/video.mp4" type="video/mp4" />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 flex flex-col justify-end p-8 md:p-16">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/20 flex flex-col justify-end p-6 md:p-16">
               <motion.div
                 initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 className={isRTL ? 'text-right' : 'text-left'}
               >
-                <h2 className="text-4xl md:text-7xl font-black uppercase italic tracking-tighter text-white leading-none mb-4">
+                <h2 className="text-3xl md:text-7xl font-black uppercase italic tracking-tighter text-white leading-[0.9] mb-4">
                   Powered by <span className="text-primary text-outline">Excellence</span>
                 </h2>
-                <p className="text-lg md:text-xl text-white/60 max-w-2xl mb-8 font-medium">Inside look at the science and sweat that fuels Omnia Gym athletes every single day.</p>
+                <p className="text-sm md:text-xl text-white/60 max-w-2xl mb-8 font-medium">Inside look at the science and sweat that fuels Omnia Shop every single day.</p>
                 <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   
                 </div>

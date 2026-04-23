@@ -20,7 +20,8 @@ const ProductDetail = () => {
       try {
         const data = await fetchProductById(id);
         setProduct(data);
-        if (data.flavors && data.flavors.length > 0) setSelectedFlavor(data.flavors[0]);
+        // Do not auto-select flavor to force user selection
+        // if (data.flavors && data.flavors.length > 0) setSelectedFlavor(data.flavors[0]);
       } catch (err) {
         console.error("Failed to load product", err);
       } finally {
@@ -102,12 +103,11 @@ const ProductDetail = () => {
             ))}
           </motion.div>
 
-          {/* Product Details */}
           <motion.div 
             variants={stagger}
             initial="hidden"
             animate="visible"
-            className={`lg:col-span-5 sticky top-40 ${isRTL ? 'text-right' : 'text-left'}`}
+            className={`lg:col-span-5 lg:sticky lg:top-40 ${isRTL ? 'text-right' : 'text-left'}`}
           >
             <motion.h1 
               variants={fadeIn}
@@ -167,10 +167,20 @@ const ProductDetail = () => {
             {/* CTA */}
             <motion.button 
               variants={fadeIn}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => addToCart({ ...product, flavor: selectedFlavor })}
-              className={`w-full bg-primary text-on-primary py-6 rounded-xl font-black uppercase text-xl tracking-tighter italic flex items-center justify-center gap-3 transition-all group shadow-[0_20px_50px_rgba(244,255,198,0.2)] ${isRTL ? 'flex-row-reverse' : ''}`}
+              whileHover={selectedFlavor || (product.flavors && product.flavors.length === 0) ? { scale: 1.02 } : {}}
+              whileTap={selectedFlavor || (product.flavors && product.flavors.length === 0) ? { scale: 0.98 } : {}}
+              onClick={() => {
+                if (product.flavors && product.flavors.length > 0 && !selectedFlavor) {
+                  alert(t('product.selectFlavor') || 'Please select a flavor');
+                  return;
+                }
+                addToCart({ ...product, flavor: selectedFlavor });
+              }}
+              className={`w-full py-6 rounded-xl font-black uppercase text-xl tracking-tighter italic flex items-center justify-center gap-3 transition-all group shadow-[0_20px_50px_rgba(244,255,198,0.2)] ${isRTL ? 'flex-row-reverse' : ''} ${
+                (product.flavors && product.flavors.length > 0 && !selectedFlavor) 
+                ? 'bg-surface-container-highest text-on-surface-variant cursor-not-allowed grayscale' 
+                : 'bg-primary text-on-primary'
+              }`}
             >
               <span className="material-symbols-outlined font-black">shopping_cart</span>
               {t('product.addToStack')}

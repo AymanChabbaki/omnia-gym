@@ -1,4 +1,4 @@
-const API_URL = 'https://omnia-gym-backend.vercel.app/api';
+const API_URL = 'http://localhost:5000/api';
 
 export const fetchCategories = async () => {
   const res = await fetch(`${API_URL}/categories`);
@@ -24,6 +24,17 @@ export const fetchProducts = async (category = 'all', search = '') => {
 export const fetchProductById = async (id) => {
   const res = await fetch(`${API_URL}/products/${id}`);
   if (!res.ok) throw new Error('Failed to fetch product details');
+  return res.json();
+};
+
+// Order Operations
+export const createOrder = async (orderData) => {
+  const res = await fetch(`${API_URL}/orders`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderData)
+  });
+  if (!res.ok) throw new Error('Failed to place order');
   return res.json();
 };
 
@@ -63,4 +74,17 @@ export const updateProduct = async (id, data, token) => {
 export const deleteProduct = async (id, token) => {
   const res = await fetch(`${API_URL}/products/${id}`, { method: 'DELETE', headers: adminHeaders(token) });
   if (!res.ok) throw new Error('Failed to delete'); return res.json();
+};
+
+// Order Admin
+export const fetchOrders = async (token) => {
+  const res = await fetch(`${API_URL}/orders`, { headers: adminHeaders(token) });
+  if (!res.ok) throw new Error('Failed to fetch orders');
+  return res.json();
+};
+
+export const deleteOrder = async (id, token) => {
+  const res = await fetch(`${API_URL}/orders/${id}`, { method: 'DELETE', headers: adminHeaders(token) });
+  if (!res.ok) throw new Error('Failed to delete order');
+  return res.json();
 };

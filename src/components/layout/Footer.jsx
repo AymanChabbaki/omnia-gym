@@ -41,7 +41,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="text-center mt-12 pt-8 border-t border-white/5 text-gray-500 text-sm uppercase font-bold tracking-widest">
-        © 2024 Omnia Gym. {t('common.engineered')}
+        © 2026 Omnia Shop. {t('common.engineered')}
       </div>
     </footer>
   );

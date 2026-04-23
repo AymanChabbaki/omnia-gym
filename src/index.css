@@ -104,4 +104,32 @@
 
   .hide-scrollbar::-webkit-scrollbar { display: none; }
   .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Receipt Specific Styles */
+  .bg-summary-row {
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+  }
+  
+  .bg-status-section {
+    background-color: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+  }
+
+  /* Responsive Utilities */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }

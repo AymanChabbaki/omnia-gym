@@ -3,14 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   fetchProducts, fetchCategories, 
   createProduct, updateProduct, deleteProduct,
-  createCategory, updateCategory, deleteCategory 
+  createCategory, updateCategory, deleteCategory,
+  fetchOrders, deleteOrder
 } from '../services/api';
 
 const AdminDashboard = () => {
   const [auth, setAuth] = useState(false);
   const [token, setToken] = useState('');
   
-  const [view, setView] = useState('products'); // 'products' or 'categories'
+  const [view, setView] = useState('products'); // 'products', 'categories', or 'orders'
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,10 +36,14 @@ const AdminDashboard = () => {
       if (view === 'products') {
         const data = await fetchProducts();
         setItems(data);
-      } else {
+      } else if (view === 'categories') {
         const data = await fetchCategories();
         setItems(data);
+      } else {
+        const data = await fetchOrders(token);
+        setItems(data);
       }
+      
       // Always load categories for the product dropdown
       const cats = await fetchCategories();
       setCategories(cats);
@@ -88,7 +93,8 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       if (view === 'products') await deleteProduct(id, token);
-      else await deleteCategory(id, token);
+      else if (view === 'categories') await deleteCategory(id, token);
+      else await deleteOrder(id, token);
       await loadData();
     } catch (err) {
       alert("Error deleting: " + err.message);
@@ -147,6 +153,7 @@ const AdminDashboard = () => {
         <div className="flex gap-4 p-2 bg-surface-container rounded-xl">
           <button onClick={() => setView('products')} className={`px-6 py-2 rounded-lg font-bold uppercase tracking-widest transition-colors ${view === 'products' ? 'bg-primary text-on-primary' : 'hover:bg-white/5'}`}>Products</button>
           <button onClick={() => setView('categories')} className={`px-6 py-2 rounded-lg font-bold uppercase tracking-widest transition-colors ${view === 'categories' ? 'bg-primary text-on-primary' : 'hover:bg-white/5'}`}>Categories</button>
+          <button onClick={() => setView('orders')} className={`px-6 py-2 rounded-lg font-bold uppercase tracking-widest transition-colors ${view === 'orders' ? 'bg-primary text-on-primary' : 'hover:bg-white/5'}`}>Orders</button>
         </div>
       </div>
 
@@ -157,9 +164,11 @@ const AdminDashboard = () => {
           {/* Table Header Controls */}
           <div className="p-6 border-b border-white/10 flex justify-between items-center">
             <h2 className="text-xl font-black uppercase tracking-tight">{view} Table ({items.length})</h2>
-            <button onClick={() => openForm()} className="bg-secondary text-on-secondary px-6 py-3 rounded-lg flex items-center gap-2 font-bold uppercase hover:scale-105 transition-transform">
-              <span className="material-symbols-outlined font-black">add</span> Add New
-            </button>
+            {view !== 'orders' && (
+              <button onClick={() => openForm()} className="bg-secondary text-on-secondary px-6 py-3 rounded-lg flex items-center gap-2 font-bold uppercase hover:scale-105 transition-transform">
+                <span className="material-symbols-outlined font-black">add</span> Add New
+              </button>
+            )}
           </div>
 
           {/* Table Graphics */}
@@ -168,9 +177,20 @@ const AdminDashboard = () => {
               <thead className="bg-surface-container font-black uppercase tracking-widest text-xs text-on-surface-variant">
                 <tr>
                   <th className="p-4">ID</th>
-                  <th className="p-4">Name (EN/AR/FR)</th>
-                  {view === 'products' && <th className="p-4">Price / Brand</th>}
-                  {view === 'categories' && <th className="p-4">Icon / Order</th>}
+                  {view === 'orders' ? (
+                    <>
+                      <th className="p-4">Customer</th>
+                      <th className="p-4">Contact</th>
+                      <th className="p-4">Total</th>
+                      <th className="p-4">Items</th>
+                    </>
+                  ) : (
+                    <>
+                      <th className="p-4">Name (EN/AR/FR)</th>
+                      {view === 'products' && <th className="p-4">Price / Brand</th>}
+                      {view === 'categories' && <th className="p-4">Icon / Order</th>}
+                    </>
+                  )}
                   <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
@@ -179,24 +199,50 @@ const AdminDashboard = () => {
                   {items.map(item => (
                     <motion.tr key={item.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                       <td className="p-4 font-mono text-sm text-primary">{item.id}</td>
-                      <td className="p-4 font-bold">
-                        <div>{item.name_en}</div>
-                        <div className="text-xs text-on-surface-variant">{item.name_ar} | {item.name_fr}</div>
-                      </td>
-                      {view === 'products' && (
-                        <td className="p-4">
-                          <div className="text-secondary font-black">{item.price} DH</div>
-                          <div className="text-xs">{item.brand}</div>
-                        </td>
+                      
+                      {view === 'orders' ? (
+                        <>
+                          <td className="p-4">
+                            <div className="font-bold">{item.full_name}</div>
+                            <div className="text-xs text-on-surface-variant">{item.city} | {item.address}</div>
+                          </td>
+                          <td className="p-4 text-sm">{item.phone}</td>
+                          <td className="p-4 font-black text-secondary">{item.total} DH</td>
+                          <td className="p-4">
+                            <div className="max-h-20 overflow-y-auto space-y-1">
+                              {item.items?.map((oi, idx) => (
+                                <div key={idx} className="text-[10px] leading-tight">
+                                  {oi.quantity}x {oi.product_name} ({oi.flavor || 'Universal'})
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td className="p-4 font-bold">
+                            <div>{item.name_en}</div>
+                            <div className="text-xs text-on-surface-variant">{item.name_ar} | {item.name_fr}</div>
+                          </td>
+                          {view === 'products' && (
+                            <td className="p-4">
+                              <div className="text-secondary font-black">{item.price} DH</div>
+                              <div className="text-xs">{item.brand}</div>
+                            </td>
+                          )}
+                          {view === 'categories' && (
+                            <td className="p-4">
+                              <span className="material-symbols-outlined text-lg mr-2">{item.icon}</span> 
+                              <span className="font-mono text-xs opacity-50">Sort: {item.sort_order}</span>
+                            </td>
+                          )}
+                        </>
                       )}
-                      {view === 'categories' && (
-                        <td className="p-4">
-                          <span className="material-symbols-outlined text-lg mr-2">{item.icon}</span> 
-                          <span className="font-mono text-xs opacity-50">Sort: {item.sort_order}</span>
-                        </td>
-                      )}
+
                       <td className="p-4 text-right space-x-2">
-                        <button onClick={() => openForm(item)} className="p-2 bg-surface-container rounded hover:text-white transition-colors"><span className="material-symbols-outlined text-sm">edit</span></button>
+                        {view !== 'orders' && (
+                          <button onClick={() => openForm(item)} className="p-2 bg-surface-container rounded hover:text-white transition-colors"><span className="material-symbols-outlined text-sm">edit</span></button>
+                        )}
                         <button onClick={() => handleDelete(item.id)} className="p-2 bg-red-900/30 text-red-400 rounded hover:bg-red-500 hover:text-white transition-colors"><span className="material-symbols-outlined text-sm">delete</span></button>
                       </td>
                     </motion.tr>

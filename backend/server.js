@@ -5,6 +5,7 @@ import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 
 import categoryRoutes from './routes/categoryRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 
 // Load env vars
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(express.json()); // Parse JSON bodies
 // API Routes
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
 // General health check route
 app.get('/', (req, res) => {

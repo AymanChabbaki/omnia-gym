@@ -19,6 +19,7 @@ const ProductCard = ({ product }) => {
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
 
   const handleMouseMove = (e) => {
+    if ('ontouchstart' in window) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -42,7 +43,7 @@ const ProductCard = ({ product }) => {
       onMouseLeave={handleMouseLeave}
       className={`group bg-surface-container-high rounded-3xl overflow-hidden flex flex-col transition-shadow duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5 ${isRTL ? 'text-right' : 'text-left'}`}
     >
-      <Link to={`/product/${product.id}`} className="relative h-80 bg-surface-container overflow-hidden block">
+      <Link to={`/product/${product.id}`} className="relative h-64 bg-surface-container overflow-hidden block">
         <motion.img 
           style={{ translateZ: 50 }}
           className="w-full h-full object-contain p-8 group-hover:scale-110 transition-transform duration-700" 
@@ -57,14 +58,14 @@ const ProductCard = ({ product }) => {
           ))}
         </div>
       </Link>
-      <div style={{ translateZ: 30 }} className="p-8 flex flex-col flex-grow">
+      <div style={{ translateZ: 30 }} className="p-6 flex flex-col flex-grow">
         <div className="mb-2">
           <span className="text-[10px] text-primary uppercase font-black tracking-[0.2em]">{product.brand}</span>
-          <h3 className="font-headline font-black text-2xl uppercase tracking-tighter mt-1 italic leading-none">{getLocalized(product, 'name')}</h3>
+          <h3 className="font-headline font-black text-xl uppercase tracking-tighter mt-1 italic leading-none">{getLocalized(product, 'name')}</h3>
         </div>
         <p className="text-on-surface-variant mb-6 flex-grow text-sm leading-relaxed font-medium opacity-70">{getLocalized(product, 'description')}</p>
         <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <span className="text-3xl font-black text-white italic tracking-tighter">{product.price} DH</span>
+          <span className="text-2xl font-black text-white italic tracking-tighter">{product.price} DH</span>
           <button 
             onClick={() => addToCart(product)}
             className="p-4 bg-primary text-black rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-[0_10px_20px_rgba(244,255,198,0.2)]"
