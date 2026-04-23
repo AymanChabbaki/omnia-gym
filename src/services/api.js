@@ -62,12 +62,28 @@ export const deleteCategory = async (id, token) => {
 
 // Product Admin
 export const createProduct = async (data, token) => {
-  const res = await fetch(`${API_URL}/products`, { method: 'POST', headers: adminHeaders(token), body: JSON.stringify(data) });
+  const isFormData = data instanceof FormData;
+  const headers = { 'Authorization': `Bearer ${token}` };
+  if (!isFormData) headers['Content-Type'] = 'application/json';
+
+  const res = await fetch(`${API_URL}/products`, { 
+    method: 'POST', 
+    headers, 
+    body: isFormData ? data : JSON.stringify(data) 
+  });
   if (!res.ok) throw new Error('Failed to create'); return res.json();
 };
 
 export const updateProduct = async (id, data, token) => {
-  const res = await fetch(`${API_URL}/products/${id}`, { method: 'PUT', headers: adminHeaders(token), body: JSON.stringify(data) });
+  const isFormData = data instanceof FormData;
+  const headers = { 'Authorization': `Bearer ${token}` };
+  if (!isFormData) headers['Content-Type'] = 'application/json';
+
+  const res = await fetch(`${API_URL}/products/${id}`, { 
+    method: 'PUT', 
+    headers, 
+    body: isFormData ? data : JSON.stringify(data) 
+  });
   if (!res.ok) throw new Error('Failed to update'); return res.json();
 };
 

@@ -19,6 +19,7 @@ const AdminDashboard = () => {
   // Form State
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   // --- Auth & Data Loading ---
   const handleLogin = (e) => {
@@ -72,8 +73,21 @@ const AdminDashboard = () => {
       if (typeof dataPayload.flavors === 'string') dataPayload.flavors = dataPayload.flavors.split(',').map(s=>s.trim());
 
       if (view === 'products') {
-        if (isUpdate) await updateProduct(dataPayload.id, dataPayload, token);
-        else await createProduct(dataPayload, token);
+        const formDataObj = new FormData();
+        Object.keys(dataPayload).forEach(key => {
+          if (Array.isArray(dataPayload[key])) {
+            formDataObj.append(key, JSON.stringify(dataPayload[key]));
+          } else {
+            formDataObj.append(key, dataPayload[key] || '');
+          }
+        });
+        
+        selectedFiles.forEach(file => {
+          formDataObj.append('images', file);
+        });
+
+        if (isUpdate) await updateProduct(dataPayload.id, formDataObj, token);
+        else await createProduct(formDataObj, token);
       } else {
         if (isUpdate) await updateCategory(dataPayload.id, dataPayload, token);
         else await createCategory(dataPayload, token);
@@ -108,6 +122,7 @@ const AdminDashboard = () => {
     } else {
       setFormData({ _isUpdate: false });
     }
+    setSelectedFiles([]);
     setIsEditing(true);
   };
 
@@ -331,8 +346,23 @@ const AdminDashboard = () => {
 
                     <div className="space-y-4 border-t border-white/10 pt-4">
                       <div className="space-y-2">
-                         <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant flex gap-2">Image URLs <span className="text-primary italic normal-case tracking-normal">comma separated</span></label>
-                         <textarea required className="w-full bg-surface-container p-3 rounded-lg text-xs font-mono" rows="2" value={formData.images || ''} onChange={e => setFormData({...formData, images: e.target.value})} />
+                         <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant flex gap-2">Upload New Images <span className="text-primary italic normal-case tracking-normal">Cloudinary direct</span></label>
+                         <input 
+                            type="file" 
+                            multiple 
+                            accept="image/*"
+                            className="w-full bg-surface-container p-3 rounded-lg text-xs" 
+                            onChange={e => setSelectedFiles(Array.from(e.target.files))}
+                         />
+                         {selectedFiles.length > 0 && (
+                           <div className="text-[10px] text-primary font-bold">
+                             {selectedFiles.length} files selected
+                           </div>
+                         )}
+                      </div>
+                      <div className="space-y-2">
+                         <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant flex gap-2">Existing Image URLs <span className="text-primary italic normal-case tracking-normal">comma separated</span></label>
+                         <textarea className="w-full bg-surface-container p-3 rounded-lg text-xs font-mono" rows="2" value={formData.images || ''} onChange={e => setFormData({...formData, images: e.target.value})} />
                       </div>
                       <div className="space-y-2">
                          <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant flex gap-2">Flavors / النكهات <span className="text-primary italic normal-case tracking-normal">comma separated</span></label>

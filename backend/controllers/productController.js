@@ -1,4 +1,18 @@
 import pool from '../config/db.js';
+import cloudinary from '../config/cloudinary.js';
+
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: 'products' },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    uploadStream.end(fileBuffer);
+  });
+};
 
 // @desc    Fetch all products (with optional filtering)
 // @route   GET /api/products
@@ -52,12 +66,25 @@ export const getProductById = async (req, res, next) => {
 // @access  Private/Admin
 export const createProduct = async (req, res, next) => {
   try {
-    const { id, category_id, brand, price, images, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tags, flavors } = req.body;
+    const { id, category_id, brand, price, name_en, name_ar, name_fr, description_en, description_ar, description_fr } = req.body;
+    
+    let imageUrls = req.body.images ? (typeof req.body.images === 'string' ? JSON.parse(req.body.images) : req.body.images) : [];
+    const tagsArray = req.body.tags ? (typeof req.body.tags === 'string' ? JSON.parse(req.body.tags) : req.body.tags) : [];
+    const flavorsArray = req.body.flavors ? (typeof req.body.flavors === 'string' ? JSON.parse(req.body.flavors) : req.body.flavors) : [];
+
+    // Handle file uploads if present
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map(file => uploadToCloudinary(file.buffer));
+      const results = await Promise.all(uploadPromises);
+      const newUrls = results.map(result => result.secure_url);
+      imageUrls = [...imageUrls, ...newUrls];
+    }
+
     const { rows } = await pool.query(
       `INSERT INTO products 
       (id, category_id, brand, price, images, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tags, flavors) 
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`,
-      [id, category_id, brand, price, images || [], name_en, name_ar, name_fr, description_en, description_ar, description_fr, tags || [], flavors || []]
+      [id, category_id, brand, price, imageUrls, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tagsArray, flavorsArray]
     );
     res.status(201).json(rows[0]);
   } catch (error) {
@@ -71,13 +98,26 @@ export const createProduct = async (req, res, next) => {
 export const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { category_id, brand, price, images, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tags, flavors } = req.body;
+    const { category_id, brand, price, name_en, name_ar, name_fr, description_en, description_ar, description_fr } = req.body;
+
+    let imageUrls = req.body.images ? (typeof req.body.images === 'string' ? JSON.parse(req.body.images) : req.body.images) : [];
+    const tagsArray = req.body.tags ? (typeof req.body.tags === 'string' ? JSON.parse(req.body.tags) : req.body.tags) : [];
+    const flavorsArray = req.body.flavors ? (typeof req.body.flavors === 'string' ? JSON.parse(req.body.flavors) : req.body.flavors) : [];
+
+    // Handle file uploads if present
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map(file => uploadToCloudinary(file.buffer));
+      const results = await Promise.all(uploadPromises);
+      const newUrls = results.map(result => result.secure_url);
+      imageUrls = [...imageUrls, ...newUrls];
+    }
+
     const { rows } = await pool.query(
       `UPDATE products SET 
         category_id = $1, brand = $2, price = $3, images = $4, name_en = $5, name_ar = $6, name_fr = $7, 
         description_en = $8, description_ar = $9, description_fr = $10, tags = $11, flavors = $12 
       WHERE id = $13 RETURNING *`,
-      [category_id, brand, price, images, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tags, flavors, id]
+      [category_id, brand, price, imageUrls, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tagsArray, flavorsArray, id]
     );
     if (rows.length === 0) return res.status(404).json({ message: 'Product not found' });
     res.json(rows[0]);

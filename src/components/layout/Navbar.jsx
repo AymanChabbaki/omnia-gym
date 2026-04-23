@@ -95,7 +95,7 @@ const Navbar = () => {
               </span>
             )}
           </Link>
-          <button className="material-symbols-outlined hover:scale-110 transition-all text-white/70">person</button>
+          
         </div>
       </nav>
       <div className="bg-gradient-to-b from-[#1a1a1a] to-transparent h-px w-full fixed top-[112px] z-50"></div>

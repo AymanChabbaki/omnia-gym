@@ -26,8 +26,8 @@ const MobileNav = () => {
               rel="noopener noreferrer"
               className="flex flex-col items-center justify-center text-primary"
             >
-              <span className="material-symbols-outlined text-2xl">chat</span>
-              <span className="font-headline text-[8px] font-black uppercase mt-1">+213661349808</span>
+              <img src="/whatsapp-icon.svg" alt="WhatsApp" className="w-6 h-6" />
+              <span className="font-headline text-[8px] font-black uppercase mt-1 text-[#25D366]">+213661349808</span>
             </a>
           );
         }

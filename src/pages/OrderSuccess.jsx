@@ -139,8 +139,8 @@ const OrderSuccess = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 mb-6">
             <span className="material-symbols-outlined text-5xl text-primary">check_circle</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-black uppercase text-primary mb-4 leading-tight">{t('orderSuccess.thanks')}</h1>
-          <p className="text-on-surface-variant text-lg max-w-lg mx-auto font-medium">
+          <h1 className="text-3xl md:text-5xl font-black uppercase text-primary mb-4 leading-tight">{t('orderSuccess.thanks')}</h1>
+          <p className="text-on-surface-variant text-base md:text-lg max-w-lg mx-auto font-medium px-4">
             {t('orderSuccess.contactDesc')}
           </p>
         </div>
@@ -150,7 +150,7 @@ const OrderSuccess = () => {
           <button 
             onClick={handleDownloadPDF} 
             disabled={isGenerating}
-            className={`group relative overflow-hidden bg-white text-black px-10 py-4 rounded-2xl font-black uppercase tracking-tighter flex items-center gap-3 transition-all active:scale-95 ${isGenerating ? 'opacity-80 cursor-not-allowed' : 'hover:bg-primary hover:text-on-primary shadow-xl shadow-white/5'}`}
+            className={`group relative overflow-hidden bg-white text-black px-6 md:px-10 py-3 md:py-4 rounded-2xl font-black uppercase tracking-tighter flex items-center gap-3 transition-all active:scale-95 ${isGenerating ? 'opacity-80 cursor-not-allowed' : 'hover:bg-primary hover:text-on-primary shadow-xl shadow-white/5'}`}
           >
             <AnimatePresence mode="wait">
               {isGenerating ? (
@@ -172,7 +172,7 @@ const OrderSuccess = () => {
           
           <button 
             onClick={() => navigate('/')} 
-            className="bg-surface-container-high border border-white/10 text-white px-10 py-4 rounded-2xl font-black uppercase tracking-tighter hover:bg-white/5 transition-all flex items-center gap-3 active:scale-95"
+            className="bg-surface-container-high border border-white/10 text-white px-6 md:px-10 py-3 md:py-4 rounded-2xl font-black uppercase tracking-tighter hover:bg-white/5 transition-all flex items-center gap-3 active:scale-95"
           >
             <span className="material-symbols-outlined">home</span>
             {t('orderSuccess.backHome')}
@@ -186,19 +186,19 @@ const OrderSuccess = () => {
           
           <div 
             ref={receiptRef}
-            className="relative bg-[#0e0e0e] p-8 md:p-14 rounded-[30px] border border-white/10 shadow-2xl overflow-hidden"
+            className="relative bg-[#0e0e0e] p-6 md:p-14 rounded-[24px] md:rounded-[30px] border border-white/10 shadow-2xl overflow-hidden"
             id="receipt-content"
           >
             {/* Brand Watermark */}
-            <div className="absolute top-0 right-0 p-10 opacity-[0.03] pointer-events-none select-none">
-                <h2 className="text-9xl font-black rotate-12 transform translate-x-1/4 -translate-y-1/4">OMNIA SHOP</h2>
+            <div className="absolute top-0 right-0 p-6 md:p-10 opacity-[0.03] pointer-events-none select-none">
+                <h2 className="text-6xl md:text-9xl font-black rotate-12 transform translate-x-1/4 -translate-y-1/4">OMNIA SHOP</h2>
             </div>
 
             {/* Receipt Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12 pb-12 border-b border-white/10">
               <div>
-                <h2 className="text-3xl font-black text-primary mb-2 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-4xl">fitness_center</span>
+                <h2 className="text-2xl md:text-3xl font-black text-primary mb-2 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-3xl md:text-4xl">fitness_center</span>
                   OMNIA SHOP
                 </h2>
                 <p className="text-on-surface-variant font-bold uppercase tracking-widest text-xs">{t('orderSuccess.received')}</p>
@@ -225,7 +225,7 @@ const OrderSuccess = () => {
                     <h3 className="text-sm font-black text-primary uppercase tracking-widest mb-4 opacity-70">STATUS</h3>
                     <div className="flex items-center gap-3">
                         <span className="material-symbols-outlined text-3xl text-primary animate-pulse">pending</span>
-                        <p className="text-xl font-bold uppercase tracking-tighter">Processing Order</p>
+                        <p className="text-lg md:text-xl font-bold uppercase tracking-tighter">Processing Order</p>
                     </div>
                 </div>
             </div>
@@ -274,9 +274,9 @@ const OrderSuccess = () => {
                   <span className="uppercase tracking-widest text-xs font-black opacity-60">{t('orderSuccess.delivery')}</span>
                   <span className="font-mono font-black text-lg" dir="ltr">{formattedPrice(order.delivery)}</span>
                 </div>
-                <div className={`flex justify-between items-center p-6 bg-primary rounded-2xl shadow-xl shadow-primary/10 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                  <span className="text-xl font-black uppercase tracking-tighter text-black">{t('orderSuccess.total')}</span>
-                  <span className="text-3xl font-black font-mono text-black" dir="ltr">{formattedPrice(order.total)}</span>
+                <div className={`flex justify-between items-center p-5 md:p-6 bg-primary rounded-2xl shadow-xl shadow-primary/10 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <span className="text-lg md:text-xl font-black uppercase tracking-tighter text-black">{t('orderSuccess.total')}</span>
+                  <span className="text-2xl md:text-3xl font-black font-mono text-black" dir="ltr">{formattedPrice(order.total)}</span>
                 </div>
             </div>
 
