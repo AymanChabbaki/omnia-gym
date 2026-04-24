@@ -202,7 +202,7 @@ const AdminDashboard = () => {
                   ) : (
                     <>
                       <th className="p-4">Name (EN/AR/FR)</th>
-                      {view === 'products' && <th className="p-4">Price / Brand</th>}
+                      {view === 'products' && <th className="p-4">Price / Brand / Stock</th>}
                       {view === 'categories' && <th className="p-4">Icon / Order</th>}
                     </>
                   )}
@@ -242,7 +242,7 @@ const AdminDashboard = () => {
                           {view === 'products' && (
                             <td className="p-4">
                               <div className="text-secondary font-black">{item.price} DH</div>
-                              <div className="text-xs">{item.brand}</div>
+                              <div className="text-xs">{item.brand} | Stock: <span className="text-primary font-bold">{item.stock || 0}</span></div>
                             </td>
                           )}
                           {view === 'categories' && (
@@ -317,6 +317,10 @@ const AdminDashboard = () => {
                       <div className="space-y-2">
                          <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Price</label>
                          <input required type="number" step="0.01" className="w-full bg-surface-container p-3 rounded-lg" value={formData.price || ''} onChange={e => setFormData({...formData, price: e.target.value})} />
+                      </div>
+                      <div className="space-y-2">
+                         <label className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Stock Quantity</label>
+                         <input required type="number" className="w-full bg-surface-container p-3 rounded-lg" value={formData.stock || 0} onChange={e => setFormData({...formData, stock: e.target.value})} />
                       </div>
                     </>
                   )}

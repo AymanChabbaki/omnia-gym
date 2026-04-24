@@ -51,6 +51,11 @@ const ProductCard = ({ product }) => {
           alt={getLocalized(product, 'name')} 
         />
         <div className={`absolute top-4 ${isRTL ? 'right-4' : 'left-4'} flex flex-col gap-2`}>
+          {product.stock <= 0 && (
+            <span className="bg-red-500 text-white px-3 py-1 rounded text-[10px] font-black uppercase italic tracking-tighter">
+              Out of Stock
+            </span>
+          )}
           {product.tags && product.tags.map(tag => (
             <span key={tag} className="bg-primary text-on-primary px-3 py-1 rounded text-[10px] font-black uppercase italic tracking-tighter">
               {tag}
@@ -67,10 +72,13 @@ const ProductCard = ({ product }) => {
         <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
           <span className="text-2xl font-black text-white italic tracking-tighter">{product.price} DH</span>
           <button 
+            disabled={product.stock <= 0}
             onClick={() => addToCart(product)}
-            className="p-4 bg-primary text-black rounded-2xl hover:scale-110 active:scale-95 transition-all shadow-[0_10px_20px_rgba(244,255,198,0.2)]"
+            className={`p-4 rounded-2xl transition-all shadow-[0_10px_20px_rgba(244,255,198,0.2)] ${product.stock <= 0 ? 'bg-surface-container-highest text-on-surface-variant cursor-not-allowed opacity-50' : 'bg-primary text-black hover:scale-110 active:scale-95'}`}
           >
-            <span className="material-symbols-outlined font-black">add_shopping_cart</span>
+            <span className="material-symbols-outlined font-black">
+              {product.stock <= 0 ? 'block' : 'add_shopping_cart'}
+            </span>
           </button>
         </div>
       </div>

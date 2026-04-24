@@ -66,7 +66,7 @@ export const getProductById = async (req, res, next) => {
 // @access  Private/Admin
 export const createProduct = async (req, res, next) => {
   try {
-    const { id, category_id, brand, price, name_en, name_ar, name_fr, description_en, description_ar, description_fr } = req.body;
+    const { id, category_id, brand, price, name_en, name_ar, name_fr, description_en, description_ar, description_fr, stock } = req.body;
     
     let imageUrls = req.body.images ? (typeof req.body.images === 'string' ? JSON.parse(req.body.images) : req.body.images) : [];
     const tagsArray = req.body.tags ? (typeof req.body.tags === 'string' ? JSON.parse(req.body.tags) : req.body.tags) : [];
@@ -82,9 +82,9 @@ export const createProduct = async (req, res, next) => {
 
     const { rows } = await pool.query(
       `INSERT INTO products 
-      (id, category_id, brand, price, images, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tags, flavors) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`,
-      [id, category_id, brand, price, imageUrls, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tagsArray, flavorsArray]
+      (id, category_id, brand, price, images, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tags, flavors, stock) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *`,
+      [id, category_id, brand, price, imageUrls, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tagsArray, flavorsArray, stock || 0]
     );
     res.status(201).json(rows[0]);
   } catch (error) {
@@ -98,7 +98,7 @@ export const createProduct = async (req, res, next) => {
 export const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { category_id, brand, price, name_en, name_ar, name_fr, description_en, description_ar, description_fr } = req.body;
+    const { category_id, brand, price, name_en, name_ar, name_fr, description_en, description_ar, description_fr, stock } = req.body;
 
     let imageUrls = req.body.images ? (typeof req.body.images === 'string' ? JSON.parse(req.body.images) : req.body.images) : [];
     const tagsArray = req.body.tags ? (typeof req.body.tags === 'string' ? JSON.parse(req.body.tags) : req.body.tags) : [];
@@ -115,9 +115,9 @@ export const updateProduct = async (req, res, next) => {
     const { rows } = await pool.query(
       `UPDATE products SET 
         category_id = $1, brand = $2, price = $3, images = $4, name_en = $5, name_ar = $6, name_fr = $7, 
-        description_en = $8, description_ar = $9, description_fr = $10, tags = $11, flavors = $12 
-      WHERE id = $13 RETURNING *`,
-      [category_id, brand, price, imageUrls, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tagsArray, flavorsArray, id]
+        description_en = $8, description_ar = $9, description_fr = $10, tags = $11, flavors = $12, stock = $13 
+      WHERE id = $14 RETURNING *`,
+      [category_id, brand, price, imageUrls, name_en, name_ar, name_fr, description_en, description_ar, description_fr, tagsArray, flavorsArray, stock, id]
     );
     if (rows.length === 0) return res.status(404).json({ message: 'Product not found' });
     res.json(rows[0]);

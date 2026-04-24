@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { fetchProducts } from '../services/api';
 import ProductCard from '../components/product/ProductCard';
 import { Link } from 'react-router-dom';
@@ -10,6 +10,23 @@ const Home = () => {
   const { t, getLocalized, isRTL } = useLanguage();
   const [bestSellers, setBestSellers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    { type: 'image', src: '/img0.jpg' },
+    { type: 'video', src: '/video.mp4' },
+    { type: 'image', src: '/img1.png' },
+    { type: 'image', src: '/img2.jpg' },
+    { type: 'image', src: '/img3.png' },
+    { type: 'video', src: '/herobg.mp4' }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % slides.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -68,21 +85,49 @@ const Home = () => {
     <motion.div initial="hidden" animate="visible" className="pt-24 overflow-hidden bg-surface">
       {/* Hero Section with Mouse Parallax */}
       <section className="relative h-[90vh] min-h-[700px] flex items-center overflow-hidden bg-surface">
-        <motion.div 
-          style={{ x: heroX, y: heroY }}
-          className="absolute inset-0 z-0 scale-110"
-        >
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            playsInline 
-            className="w-full h-full object-cover opacity-50"
-          >
-            <source src="/herobg.mp4" type="video/mp4" />
-          </video>
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSlide}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              {slides[currentSlide].type === 'video' ? (
+                <video 
+                  autoPlay 
+                  muted 
+                  loop 
+                  playsInline 
+                  className="w-full h-full object-cover"
+                >
+                  <source src={slides[currentSlide].src} type="video/mp4" />
+                </video>
+              ) : (
+                <img 
+                  src={slides[currentSlide].src} 
+                  className="w-full h-full object-cover" 
+                  alt="" 
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+          <div className="absolute inset-0 bg-surface/40 backdrop-blur-[2px]"></div>
           <div className={`absolute inset-0 bg-gradient-to-r from-surface ${isRTL ? 'via-surface/80' : 'via-surface/40'} to-transparent`}></div>
-        </motion.div>
+          
+          {/* Carousel Indicators */}
+          <div className={`absolute bottom-12 ${isRTL ? 'left-12' : 'right-12'} flex gap-3 z-20`}>
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentSlide(i)}
+                className={`w-12 h-1 rounded-full transition-all duration-500 ${i === currentSlide ? 'bg-primary' : 'bg-white/20 hover:bg-white/40'}`}
+              />
+            ))}
+          </div>
+        </div>
         
         <div className="relative z-10 container mx-auto px-6">
           <div className={`max-w-4xl ${isRTL ? 'text-right rtl' : 'text-left'}`}>
@@ -156,15 +201,11 @@ const Home = () => {
       <section className="py-16 md:py-32 bg-surface overflow-hidden">
         <div className="container mx-auto px-4 md:px-6">
           <div className="relative group rounded-2xl md:rounded-3xl overflow-hidden aspect-[9/16] md:aspect-video shadow-[0_0_100px_rgba(244,255,198,0.1)]">
-            <video 
-              autoPlay 
-              muted 
-              loop 
-              playsInline 
-              className="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000"
-            >
-              <source src="/video.mp4" type="video/mp4" />
-            </video>
+            <img 
+              src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80" 
+              className="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000" 
+              alt="Cinematic" 
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/20 flex flex-col justify-end p-6 md:p-16">
               <motion.div
                 initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
@@ -199,7 +240,7 @@ const Home = () => {
               whileHover={{ scale: 1.02 }}
               className="group relative overflow-hidden rounded-xl bg-surface-container-high h-[400px] md:h-[600px] cursor-pointer"
             >
-              <img className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80" alt="" />
+              <img className="absolute inset-0 w-full h-full object-contain p-12 opacity-80 group-hover:scale-110 transition-transform duration-700" src="https://proteinpackage.co.uk/cdn/shop/products/Optimum-Nutrition-Serious-Mass-Banana-Whey-Protein-Powder-8-Serving-Tub-UK_1000x.png?v=1645900498" alt="" />
               <div className={`absolute inset-0 p-8 flex flex-col justify-end bg-gradient-to-t from-surface to-transparent ${isRTL ? 'text-right items-end' : 'text-left items-start'}`}>
                 <h3 className="font-headline font-black text-4xl uppercase tracking-tighter mb-2 text-white w-full">{t('home.categories.massGainers')}</h3>
                 <p className="text-on-surface-variant text-lg w-full">{t('home.categories.massDesc')}</p>
@@ -209,7 +250,7 @@ const Home = () => {
           
           <Link to="/catalog?category=whey-protein">
             <motion.div variants={itemVariants} whileHover={{ scale: 1.02 }} className="group relative overflow-hidden rounded-xl bg-surface-container-high h-[288px] cursor-pointer">
-              <img className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1541534741688-6078c64b5cc5?auto=format&fit=crop&q=80" alt="" />
+              <img className="absolute inset-0 w-full h-full object-contain p-8 opacity-80 group-hover:scale-110 transition-transform duration-700" src="https://getrawnutrition.com/cdn/shop/files/isolateprotein-coldbrew.webp?v=1755271280&width=1080" alt="" />
               <div className={`absolute inset-0 p-6 flex flex-col justify-end ${isRTL ? 'text-right items-end' : 'text-left items-start'}`}>
                 <h3 className="font-headline font-black text-2xl uppercase tracking-tighter text-white w-full">{t('home.categories.wheyIsolate')}</h3>
               </div>
@@ -218,7 +259,7 @@ const Home = () => {
           
           <Link to="/catalog?category=creatine">
             <motion.div variants={itemVariants} whileHover={{ scale: 1.02 }} className="group relative overflow-hidden rounded-xl bg-surface-container-high h-[288px] cursor-pointer">
-              <img className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&q=80" alt="" />
+              <img className="absolute inset-0 w-full h-full object-contain p-8 opacity-80 group-hover:scale-110 transition-transform duration-700" src="https://www.suppleam.com/wp-content/uploads/2022/10/photo-output-9-768x1024.jpg" alt="" />
               <div className={`absolute inset-0 p-6 flex flex-col justify-end ${isRTL ? 'text-right items-end' : 'text-left items-start'}`}>
                 <h3 className="font-headline font-black text-2xl uppercase tracking-tighter text-white w-full">{t('home.categories.creatine')}</h3>
               </div>

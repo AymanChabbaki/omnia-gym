@@ -72,7 +72,7 @@ const TopBar = () => {
               <img src="/whatsapp-icon.svg" alt="WhatsApp" className="w-4 h-4 invert brightness-200" />
             </motion.a>
             <motion.a 
-              href="https://instagram.com/omnia" 
+              href="https://www.instagram.com/omniagym_officiel/" 
               target="_blank" 
               whileHover={{ scale: 1.1 }} 
               className="opacity-40 hover:opacity-100 transition-opacity"
