@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /hidden
+Disallow: /admin
+
+Sitemap: https://omnia-shop.ma/sitemap.xml
