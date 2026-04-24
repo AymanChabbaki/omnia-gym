@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = process.env.API_URL;
 
 export const fetchCategories = async () => {
   const res = await fetch(`${API_URL}/categories`);
