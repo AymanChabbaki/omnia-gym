@@ -201,8 +201,8 @@ const Home = () => {
       <section className="py-16 md:py-32 bg-surface overflow-hidden">
         <div className="container mx-auto px-4 md:px-6">
           <div className="relative group rounded-2xl md:rounded-3xl overflow-hidden aspect-[9/16] md:aspect-video shadow-[0_0_100px_rgba(244,255,198,0.1)]">
-            <img 
-              src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80" 
+            <img   
+              src="/img0.jpg" 
               className="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000" 
               alt="Cinematic" 
             />
