@@ -34,7 +34,9 @@ export const translations = {
       creatineOffers: "Creatine Bundles",
       browse: "Shop",
       categories: "Categories",
-      home: "Home"
+      home: "Home",
+      cart: "Cart",
+      shop: "Shop Now"
     },
     product: {
       reviews: "Reviews",
@@ -155,7 +157,9 @@ export const translations = {
       creatineOffers: "عروض الكرياتين",
       browse: "المتجر",
       categories: "الأقسام",
-      home: "الرئيسية"
+      home: "الرئيسية",
+      cart: "السلة",
+      shop: "المتجر"
     },
     product: {
       reviews: "مراجعات",
@@ -276,7 +280,9 @@ export const translations = {
       creatineOffers: "Packs Créatine",
       browse: "Boutique",
       categories: "Catégories",
-      home: "Accueil"
+      home: "Accueil",
+      cart: "Panier",
+      shop: "Boutique"
     },
     product: {
       reviews: "Avis",

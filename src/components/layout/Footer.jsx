@@ -1,47 +1,99 @@
 import React from 'react';
 import { useLanguage } from '../../store/LanguageContext';
+import { Link } from 'react-router-dom';
+import { Phone, Mail } from 'lucide-react';
+import { FaFacebookF, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   const { t, isRTL } = useLanguage();
 
   return (
-    <footer className={`bg-[#131313] w-full py-12 px-6 mt-auto ${isRTL ? 'text-right' : 'text-left'}`}>
-      <div className="bg-[#1a1a1a] h-px mb-8"></div>
-      <div className={`grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto ${isRTL ? 'md:flex-row-reverse' : ''}`}>
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="Omnia Gym" className="h-8 w-auto object-contain" />
+    <footer className="bg-secondary text-white pt-16 pb-10">
+      <div className="max-w-1400 mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        {/* Brand Section */}
+        <div className={`space-y-6 ${isRTL ? 'text-right' : 'text-left'}`}>
+          <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <img src="/logo.png" alt="Omnia Shop" className="h-10 w-auto" />
+            <div className={`flex flex-col leading-none ${isRTL ? 'items-end' : 'items-start'}`}>
+              <span className="text-lg font-black uppercase tracking-tighter">Omnia <span className="text-primary italic">Shop</span></span>
+              <span className="text-[8px] font-bold uppercase tracking-[0.3em] opacity-40">Morocco</span>
+            </div>
           </div>
-          <p className="text-sm leading-relaxed text-gray-400 max-w-xs">{t('home.heroSubtitle')}</p>
+          <p className="text-white/50 text-[11px] leading-relaxed max-w-xs">
+            {isRTL 
+              ? 'متجرك رقم 1 للمكملات الغذائية عالية الجودة في المغرب. نحن نهتم بصحتك وأدائك الرياضي.' 
+              : 'Your #1 shop for high-quality nutrition supplements in Morocco. We care about your health and performance.'}
+          </p>
+          <div className={`flex items-center gap-4 ${isRTL ? 'justify-end' : ''}`}>
+            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-all text-white">
+              <FaFacebookF size={18} />
+            </a>
+            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-all text-white">
+              <FaInstagram size={18} />
+            </a>
+          </div>
         </div>
-        <div>
-          <h4 className="font-headline font-black text-white uppercase tracking-wider mb-4">{t('nav.browse')}</h4>
-          <ul className="space-y-2 text-sm leading-relaxed text-gray-400">
-            <li><a className="hover:text-primary transition-colors" href="#">{t('nav.wheyProtein')}</a></li>
-            <li><a className="hover:text-primary transition-colors" href="#">{t('nav.creatine')}</a></li>
-            <li><a className="hover:text-primary transition-colors" href="#">{t('nav.weightGainers')}</a></li>
+
+        {/* Categories */}
+        <div className={`space-y-6 ${isRTL ? 'text-right' : 'text-left'}`}>
+          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">{isRTL ? 'الأقسام' : 'Categories'}</h4>
+          <ul className="space-y-3">
+            {[
+              { name: isRTL ? 'واي بروتين' : 'Whey Protein', id: 'whey-protein' },
+              { name: isRTL ? 'رابح الوزن' : 'Mass Gainer', id: 'mass-gainer' },
+              { name: isRTL ? 'كرياتين' : 'Creatine', id: 'creatine' },
+              { name: isRTL ? 'أحماض أمينية' : 'Amino Acids', id: 'amino-acids' }
+            ].map(item => (
+              <li key={item.id}>
+                <Link to={`/catalog?category=${item.id}`} className="text-white/40 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest">{item.name}</Link>
+              </li>
+            ))}
           </ul>
         </div>
-        <div>
-          <h4 className="font-headline font-black text-white uppercase tracking-wider mb-4">{t('common.engineered')}</h4>
-          <ul className="space-y-2 text-sm leading-relaxed text-gray-400">
-            <li><a className="hover:text-primary transition-colors" href="#">{t('product.bestSeller')}</a></li>
-            <li><a className="hover:text-primary transition-colors" href="#">{t('product.verifiedPure')}</a></li>
-            <li><a className="hover:text-primary transition-colors" href="#">{t('common.viewBundles')}</a></li>
+
+        {/* Quick Links */}
+        <div className={`space-y-6 ${isRTL ? 'text-right' : 'text-left'}`}>
+          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">{isRTL ? 'روابط سريعة' : 'Quick Links'}</h4>
+          <ul className="space-y-3">
+            {[
+              { name: isRTL ? 'من نحن' : 'About Us', path: '/about' },
+              { name: isRTL ? 'اتصل بنا' : 'Contact Us', path: '/contact' },
+              { name: isRTL ? 'سياسة الخصوصية' : 'Privacy Policy', path: '/privacy' },
+              { name: isRTL ? 'معلومات التوصيل' : 'Shipping Info', path: '/shipping' }
+            ].map(item => (
+              <li key={item.path}>
+                <Link to={item.path} className="text-white/40 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest">{item.name}</Link>
+              </li>
+            ))}
           </ul>
         </div>
-        <div>
-          <h4 className="font-headline font-black text-white uppercase tracking-wider mb-4">{isRTL ? 'اشترك' : 'Subscribe'}</h4>
-          <div className={`flex bg-surface-container rounded overflow-hidden ${isRTL ? 'flex-row-reverse' : ''}`}>
-            <input className={`bg-transparent border-none focus:ring-0 text-sm p-3 w-full text-white ${isRTL ? 'text-right' : 'text-left'}`} placeholder={isRTL ? 'بريدك الإلكتروني' : 'Your Email'} type="email"/>
-            <button className="bg-primary text-on-primary p-3">
-              <span className={`material-symbols-outlined ${isRTL ? 'rotate-180' : ''}`}>send</span>
-            </button>
+
+        {/* Contact Info */}
+        <div className={`space-y-6 ${isRTL ? 'text-right' : 'text-left'}`}>
+          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">{isRTL ? 'اتصل بنا' : 'Contact Us'}</h4>
+          <div className="space-y-4">
+            <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Phone size={14} className="text-primary mt-0.5" />
+              <div>
+                <p className="text-[9px] text-white/30 uppercase font-black">{isRTL ? 'الهاتف' : 'Phone'}</p>
+                <p className="text-[11px] font-bold">0661349808</p>
+              </div>
+            </div>
+            <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Mail size={14} className="text-primary mt-0.5" />
+              <div>
+                <p className="text-[9px] text-white/30 uppercase font-black">{isRTL ? 'البريد الإلكتروني' : 'Email'}</p>
+                <p className="text-[11px] font-bold">contact@omniagym.ma</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div className="text-center mt-12 pt-8 border-t border-white/5 text-gray-500 text-sm uppercase font-bold tracking-widest">
-        © 2026 Omnia Shop. {t('common.engineered')}
+      
+      <div className="max-w-1400 mx-auto px-6 mt-16 pt-8 border-t border-white/5 text-center">
+        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20">
+          &copy; 2024 Omnia Shop Morocco. All rights reserved.
+        </p>
       </div>
     </footer>
   );

@@ -1,36 +1,61 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import Navbar from './Navbar';
 import TopBar from './TopBar';
+import Navbar from './Navbar';
 import Footer from './Footer';
 import MobileNav from './MobileNav';
+import WhatsAppFloat from './WhatsAppFloat';
+import FloatingActions from './FloatingActions';
+import { useLanguage } from '../../store/LanguageContext';
 
 const Layout = ({ children }) => {
-  const location = useLocation();
+  const { pathname } = useLocation();
+  const { isRTL } = useLanguage();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
-    <div className="flex flex-col min-h-screen selection:bg-primary selection:text-on-primary">
-      <div className="fixed top-0 w-full z-[60]">
+    <div className={`min-h-screen flex flex-col font-sans overflow-x-clip ${isRTL ? 'rtl' : 'ltr'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+      {/* Sticky Header Group */}
+      <header className="sticky top-0 z-[100] w-full shadow-md">
         <TopBar />
-      </div>
-      <Navbar />
+        <Navbar />
+      </header>
 
-      <AnimatePresence>
-        <motion.main
-          key={location.pathname}
-          initial={{ y: 10 }}
-          animate={{ y: 0 }}
-          exit={{ y: -10 }}
-          transition={{ duration: 0.2 }}
-          className="flex-grow"
-        >
-          {children}
-        </motion.main>
-      </AnimatePresence>
+      {/* Main Content */}
+      <main className="flex-grow w-full max-w-full overflow-x-clip bg-white">
+        {children}
+      </main>
 
       <Footer />
-      <MobileNav />
+      
+      {/* Floating Action Groups */}
+      <WhatsAppFloat />
+      <FloatingActions />
+      
+      <div className="md:hidden">
+        <MobileNav />
+      </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        ::selection {
+          background-color: #4CAF50;
+          color: white;
+        }
+        body {
+          overflow-x: hidden;
+          width: 100vw;
+          margin: 0;
+          padding: 0;
+          -webkit-tap-highlight-color: transparent;
+        }
+        /* Fix for sticky header shadow on scroll */
+        .sticky-scrolled {
+          @apply shadow-xl transition-shadow duration-300;
+        }
+      `}} />
     </div>
   );
 };

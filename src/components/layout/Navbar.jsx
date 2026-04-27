@@ -1,105 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useCart } from '../../store/CartContext';
 import { useLanguage } from '../../store/LanguageContext';
-import { motion, AnimatePresence } from 'framer-motion';
 import { fetchCategories } from '../../services/api';
 
-
 const Navbar = () => {
-  const location = useLocation();
-  const { cartCount } = useCart();
-  const { t, getLocalized, isRTL } = useLanguage();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isCart = location.pathname === '/cart';
-
+  const { isRTL, getLocalized, t } = useLanguage();
   const [categories, setCategories] = useState([]);
+  const location = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadCategories = async () => {
       try {
         const data = await fetchCategories();
         setCategories(data);
       } catch (err) {
-        console.error('Failed to load categories', err);
+        console.error("Navbar category fetch error", err);
       }
     };
     loadCategories();
   }, []);
 
-
   return (
-    <>
-      <nav className={`bg-surface/80 backdrop-blur-xl fixed top-10 w-full z-50 flex justify-between items-center px-6 py-4 max-w-[1920px] left-1/2 -translate-x-1/2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-        <Link to="/" className="flex items-center gap-2">
-          <img src="/logo.png" alt="Omnia Gym" className="h-8 md:h-10 w-auto object-contain" />
-        </Link>
+    <nav className="bg-white text-on-surface w-full border-b border-gray-50">
+      <div className="max-w-1400 mx-auto px-4 md:px-8 flex items-center justify-between h-14 md:h-16">
         
-        <div className={`hidden md:flex items-center gap-8 font-headline tracking-tighter uppercase font-black text-sm ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <Link to="/" className="text-white/70 hover:text-white transition-colors">{t('nav.home')}</Link>
-          
-          <div 
-            className="relative group"
-            onMouseEnter={() => setIsMenuOpen(true)}
-            onMouseLeave={() => setIsMenuOpen(false)}
-          >
-            <button className={`flex items-center gap-2 transition-colors py-2 ${isMenuOpen ? 'text-primary' : 'text-white/70 hover:text-white'}`}>
-              <span className="material-symbols-outlined text-lg">menu</span>
-              {t('nav.categories')}
-              <span className={`material-symbols-outlined text-xs transition-transform ${isMenuOpen ? 'rotate-180' : ''}`}>expand_more</span>
-            </button>
-
-            <AnimatePresence>
-              {isMenuOpen && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className={`absolute top-full ${isRTL ? 'right-0' : 'left-0'} w-[600px] bg-surface-container-high/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 mt-2 grid grid-cols-2 gap-4 shadow-2xl z-50`}
-                >
-                  {categories.map((cat) => (
-                    
-                    <Link 
-                      key={cat.id}
-                      to={`/catalog?category=${cat.id}`}
-                      onClick={() => setIsMenuOpen(false)}
-                      className="group flex items-center gap-4 p-3 rounded-xl hover:bg-primary/10 transition-all border border-transparent hover:border-primary/20"
-                    >
-                      <div className={`w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center group-hover:scale-110 transition-transform ${cat.icon === 'local_fire_department' ? 'text-primary' : 'text-white/60 group-hover:text-primary'}`}>
-                        <span className="material-symbols-outlined text-2xl">{cat.icon}</span>
-                      </div>
-                      <div className={isRTL ? 'text-right' : 'text-left'}>
-                        <div className={`text-xs font-black tracking-widest uppercase transition-colors ${cat.icon === 'local_fire_department' ? 'text-primary' : 'group-hover:text-white'}`}>
-                          {getLocalized(cat, 'name')}
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-          
-          <Link to="/catalog" className="text-white/70 hover:text-white transition-colors">{t('nav.browse')}</Link>
-          
-        </div>
-
-        <div className={`flex items-center gap-6 text-primary ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <Link to="/cart" className={`relative flex items-center gap-1 ${isCart ? 'border-b-2 border-primary pb-1' : ''}`}>
-            <span className="material-symbols-outlined hover:scale-110 transition-all font-variation-settings-[fill_0]" style={{ fontVariationSettings: isCart ? "'FILL' 1" : "'FILL' 0" }}>
-              shopping_cart
+        {/* Logo Section */}
+        <Link to="/" className={`flex items-center gap-3 group ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <img 
+            src="/logo.png" 
+            alt="Omnia Shop" 
+            className="h-8 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+            onError={(e) => { e.target.src = '/placeholder.png'; }}
+          />
+          <div className={`hidden lg:flex flex-col leading-none ${isRTL ? 'text-right' : 'text-left'}`}>
+            <span className="text-base font-black uppercase tracking-tighter text-on-surface">Omnia <span className="text-primary italic">Shop</span></span>
+            <span className="text-[7px] font-black uppercase tracking-[0.4em] text-on-surface-variant opacity-50">
+              Morocco
             </span>
-            {cartCount > 0 && (
-              <span className={`absolute -top-2 ${isRTL ? '-left-2' : '-right-2'} bg-secondary text-on-secondary text-[10px] font-bold px-1.5 rounded-full`}>
-                {cartCount}
-              </span>
-            )}
-          </Link>
-          
+          </div>
+        </Link>
+
+        {/* Ultra-Slim Categories - Desktop */}
+        <div className={`hidden lg:flex items-center gap-8 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          {categories.slice(0, 8).map((cat) => (
+            <Link 
+              key={cat.id} 
+              to={`/catalog?category=${cat.id}`}
+              className={`text-[8px] font-black uppercase tracking-[0.25em] whitespace-nowrap transition-all hover:text-primary relative group py-1 ${
+                location.search.includes(cat.id) ? 'text-primary' : 'text-on-surface-variant/70'
+              }`}
+            >
+              {getLocalized(cat, 'name')}
+              <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
+                location.search.includes(cat.id) ? 'w-full' : 'w-0 group-hover:w-full'
+              }`}></span>
+            </Link>
+          ))}
         </div>
-      </nav>
-      <div className="bg-gradient-to-b from-[#1a1a1a] to-transparent h-px w-full fixed top-[112px] z-50"></div>
-    </>
+
+        {/* Compact Actions */}
+        <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          <Link 
+            to="/catalog" 
+            className="bg-primary text-white px-4 py-1.5 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-primary-dark transition-all shadow-md shadow-primary/10"
+          >
+            {t('nav.shop')}
+          </Link>
+        </div>
+      </div>
+
+      {/* Mobile Category Pill Scroller */}
+      <div className="lg:hidden flex overflow-x-auto no-scrollbar gap-2 px-4 py-2 bg-gray-50/30 border-t border-gray-50">
+        {categories.map((cat) => (
+          <Link 
+            key={cat.id} 
+            to={`/catalog?category=${cat.id}`}
+            className="flex-shrink-0 px-3 py-1 bg-white rounded-lg text-[7px] font-black uppercase tracking-widest text-on-surface border border-gray-100 shadow-sm transition-all"
+          >
+            {getLocalized(cat, 'name')}
+          </Link>
+        ))}
+      </div>
+    </nav>
   );
 };
 
