@@ -36,7 +36,8 @@ export const translations = {
       categories: "Categories",
       home: "Home",
       cart: "Cart",
-      shop: "Shop Now"
+      shop: "Shop Now",
+      tagline: "1st shop in Morocco"
     },
     product: {
       reviews: "Reviews",
@@ -159,7 +160,8 @@ export const translations = {
       categories: "الأقسام",
       home: "الرئيسية",
       cart: "السلة",
-      shop: "المتجر"
+      shop: "المتجر",
+      tagline: "المتجر رقم 1 في المغرب"
     },
     product: {
       reviews: "مراجعات",
@@ -282,7 +284,8 @@ export const translations = {
       categories: "Catégories",
       home: "Accueil",
       cart: "Panier",
-      shop: "Boutique"
+      shop: "Boutique",
+      tagline: "1er shop au Maroc"
     },
     product: {
       reviews: "Avis",
