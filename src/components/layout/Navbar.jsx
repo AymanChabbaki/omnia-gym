@@ -2,86 +2,100 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../store/LanguageContext';
 import { fetchCategories } from '../../services/api';
+import { Menu, X, ChevronDown, ChevronRight, User } from 'lucide-react';
+import MobileNav from './MobileNav';
 
 const Navbar = () => {
-  const { isRTL, getLocalized, t } = useLanguage();
+  const { t, isRTL, getLocalized } = useLanguage();
   const [categories, setCategories] = useState([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const data = await fetchCategories();
-        setCategories(data);
+        const cats = await fetchCategories();
+        setCategories(cats.slice(0, 7)); // Keep it slim
       } catch (err) {
-        console.error("Navbar category fetch error", err);
+        console.error(err);
       }
     };
     loadCategories();
   }, []);
 
   return (
-    <nav className="bg-white text-on-surface w-full border-b border-gray-50">
-      <div className="max-w-1400 mx-auto px-4 md:px-8 flex items-center justify-between h-14 md:h-16">
-        
-        {/* Logo Section */}
-        <Link to="/" className={`flex items-center gap-3 group ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <img 
-            src="/logo.png" 
-            alt="Omnia Shop" 
-            className="h-8 md:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
-            onError={(e) => { e.target.src = '/placeholder.png'; }}
-          />
-          <div className={`hidden lg:flex flex-col leading-none ${isRTL ? 'text-right' : 'text-left'}`}>
-            <span className="text-base font-black uppercase tracking-tighter text-on-surface">Omnia <span className="text-primary italic">Shop</span></span>
-            <span className="text-[7px] font-black uppercase tracking-[0.4em] text-on-surface-variant opacity-50">
-              Morocco
-            </span>
-          </div>
-        </Link>
+    <>
+      <nav className="bg-white/95 backdrop-blur-md shadow-sm relative z-[105]">
+        <div className="max-w-1400 mx-auto px-4 md:px-8">
+          <div className={`flex items-center justify-between h-14 md:h-20 ${isRTL ? 'flex-row-reverse' : ''}`}>
+            
+            {/* Mobile Menu Trigger & Logo Grouping for opposite sides */}
+            <div className={`flex w-full items-center justify-between lg:hidden ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <button 
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="p-2 -ml-2 text-secondary hover:text-primary transition-colors"
+              >
+                <Menu size={24} />
+              </button>
 
-        {/* Ultra-Slim Categories - Desktop */}
-        <div className={`hidden lg:flex items-center gap-8 ${isRTL ? 'flex-row-reverse' : ''}`}>
-          {categories.slice(0, 8).map((cat) => (
-            <Link 
-              key={cat.id} 
-              to={`/catalog?category=${cat.id}`}
-              className={`text-[8px] font-black uppercase tracking-[0.25em] whitespace-nowrap transition-all hover:text-primary relative group py-1 ${
-                location.search.includes(cat.id) ? 'text-primary' : 'text-on-surface-variant/70'
-              }`}
-            >
-              {getLocalized(cat, 'name')}
-              <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary transition-all duration-300 ${
-                location.search.includes(cat.id) ? 'w-full' : 'w-0 group-hover:w-full'
-              }`}></span>
+              <Link to="/" className="flex items-center gap-2 group">
+                <img src="/logo.png" className="h-8 w-auto transition-transform group-hover:scale-105" alt="Omnia Shop" />
+                <div className={`hidden xs:flex flex-col leading-none ${isRTL ? 'items-end' : 'items-start'}`}>
+                  <span className="text-sm font-black uppercase tracking-tighter text-secondary">
+                    OMNIA <span className="text-primary italic">SHOP</span>
+                  </span>
+                </div>
+              </Link>
+            </div>
+
+            {/* Desktop Only Logo (Hidden on mobile) */}
+            <Link to="/" className="hidden lg:flex items-center gap-2 group">
+              <img src="/logo.png" className="h-12 w-auto transition-transform group-hover:scale-105" alt="Omnia Shop" />
+              <div className={`flex flex-col leading-none ${isRTL ? 'items-end' : 'items-start'}`}>
+                <span className="text-xl font-black uppercase tracking-tighter text-secondary">
+                  OMNIA <span className="text-primary italic">SHOP</span>
+                </span>
+                <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-gray-300">EST. 2024</span>
+              </div>
             </Link>
-          ))}
-        </div>
 
-        {/* Compact Actions */}
-        <div className={`flex items-center gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <Link 
-            to="/catalog" 
-            className="bg-primary text-white px-4 py-1.5 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-primary-dark transition-all shadow-md shadow-primary/10"
-          >
-            {t('nav.shop')}
-          </Link>
-        </div>
-      </div>
+            {/* Desktop Navigation */}
+            <div className={`hidden lg:flex items-center gap-10 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <Link to="/" className="text-[10px] font-black uppercase tracking-widest text-secondary hover:text-primary transition-colors">
+                {isRTL ? 'الرئيسية' : 'Home'}
+              </Link>
+              {categories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  to={`/catalog?category=${cat.id}`}
+                  className="text-[10px] font-black uppercase tracking-widest text-secondary hover:text-primary transition-colors"
+                >
+                  {getLocalized(cat, 'name')}
+                </Link>
+              ))}
+              <Link to="/catalog" className="text-[10px] font-black uppercase tracking-widest text-primary hover:text-secondary transition-colors">
+                {isRTL ? 'المتجر' : 'Shop'}
+              </Link>
+            </div>
 
-      {/* Mobile Category Pill Scroller */}
-      <div className="lg:hidden flex overflow-x-auto no-scrollbar gap-2 px-4 py-2 bg-gray-50/30 border-t border-gray-50">
-        {categories.map((cat) => (
-          <Link 
-            key={cat.id} 
-            to={`/catalog?category=${cat.id}`}
-            className="flex-shrink-0 px-3 py-1 bg-white rounded-lg text-[7px] font-black uppercase tracking-widest text-on-surface border border-gray-100 shadow-sm transition-all"
-          >
-            {getLocalized(cat, 'name')}
-          </Link>
-        ))}
-      </div>
-    </nav>
+            {/* User Account / Profile Icon */}
+            <div className="hidden lg:flex items-center gap-2">
+               <Link to="/admin" className="p-2 text-secondary hover:text-primary transition-all">
+                 <User size={18} />
+               </Link>
+            </div>
+
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Navigation Drawer */}
+      <MobileNav 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)} 
+        categories={categories} 
+      />
+    </>
   );
 };
 
