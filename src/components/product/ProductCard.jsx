@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../store/LanguageContext';
 import { useCart } from '../../store/CartContext';
 import { Link } from 'react-router-dom';
-import { Eye, ShoppingCart } from 'lucide-react';
+import { Eye, ShoppingCart, Plus } from 'lucide-react';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const { getLocalized, isRTL } = useLanguage();
+  const [selectedFlavor, setSelectedFlavor] = useState('');
 
   if (!product) return null;
 
-  const hasFlavors = product.flavors && Array.isArray(product.flavors) && product.flavors.length > 0;
+  const flavors = Array.isArray(product.flavors) ? product.flavors : [];
+  const hasFlavors = flavors.length > 0;
   const isOutOfStock = typeof product.stock === 'number' && product.stock <= 0;
   const rawPrice = Number(product.price) || 0;
   const rawOriginalPrice = Number(product.original_price) || 0;
@@ -31,85 +33,100 @@ const ProductCard = ({ product }) => {
     return Number(num).toLocaleString('fr-MA', { minimumFractionDigits: 2 }) + ' د.م.';
   };
 
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    if (hasFlavors && !selectedFlavor) {
+      alert(isRTL ? 'الرجاء اختيار النكهة أولاً' : 'Please select a flavor first');
+      return;
+    }
+    addToCart(product, 1, selectedFlavor);
+  };
+
   return (
     <motion.div 
-      className="product-card flex flex-col h-full group/card"
+      className="product-card flex flex-col h-full group/card bg-white rounded-3xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500"
       whileHover={{ y: -5 }}
-      transition={{ duration: 0.3 }}
     >
       {/* Image Section */}
-      <div className="card-image aspect-square relative p-4 bg-white overflow-hidden">
+      <div className="card-image aspect-square relative p-6 bg-white overflow-hidden flex items-center justify-center">
         <Link to={`/product/${product.id}`} className="block w-full h-full">
           <img 
-            className="w-full h-full object-contain transition-transform duration-500 group-hover/card:scale-110" 
+            className="w-full h-full object-contain transition-transform duration-700 group-hover/card:scale-110" 
             src={productImage} 
             alt={productName} 
             onError={(e) => { e.target.src = 'https://proteinhouse-offers.com/wp-content/uploads/woocommerce-placeholder.png'; }}
           />
         </Link>
         
-        <div className={`absolute top-3 ${isRTL ? 'right-3' : 'left-3'} flex flex-col gap-2 z-20`}>
+        <div className={`absolute top-4 ${isRTL ? 'right-4' : 'left-4'} flex flex-col gap-2 z-20`}>
           {isOutOfStock && (
-            <span className="bg-gray-500 text-white text-[9px] font-black uppercase px-2 py-1 rounded">
+            <span className="bg-gray-500 text-white text-[9px] font-black uppercase px-3 py-1.5 rounded-full shadow-sm">
               {isRTL ? 'غير متوفر' : 'Out of Stock'}
             </span>
           )}
           {hasDiscount && (
-            <span className="bg-badge-sale text-white text-[9px] font-black uppercase px-2 py-1 rounded shadow-sm">
+            <span className="bg-[#ff4d4d] text-white text-[9px] font-black uppercase px-3 py-1.5 rounded-full shadow-sm">
               {isRTL ? 'تخفيض!' : 'Sale!'}
-            </span>
-          )}
-          {!hasDiscount && tags.length > 0 && (
-            <span className="bg-primary text-white text-[9px] font-black uppercase px-2 py-1 rounded shadow-sm">
-              {tags[0]}
             </span>
           )}
         </div>
 
-        {/* Unique Hover Overlay using group/card */}
-        <div className="card-overlay group-hover/card:opacity-100 opacity-0 bg-white/95 backdrop-blur-sm transition-all duration-300 z-10 flex flex-col items-center justify-center gap-3">
-          <Link 
-            to={`/product/${product.id}`}
-            className="w-[160px] bg-secondary text-white py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-on-surface transition-all"
-          >
-            <Eye size={14} />
-            {isRTL ? 'نظرة سريعة' : 'Quick View'}
-          </Link>
-          {!isOutOfStock && !hasFlavors && (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                addToCart(product);
-              }}
-              className="w-[160px] bg-primary text-white py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-primary-dark transition-all shadow-lg shadow-primary/20"
-            >
-              <ShoppingCart size={14} />
-              {isRTL ? 'إضافة للسلة' : 'Add to Cart'}
-            </button>
-          )}
-        </div>
+        {/* Quick Actions Hover */}
+        <div className="absolute inset-0 bg-secondary/5 group-hover/card:bg-secondary/0 transition-all pointer-events-none" />
       </div>
       
-      <div className={`p-5 flex flex-col flex-grow ${isRTL ? 'text-right' : 'text-left'} border-t border-gray-50`}>
-        <div className="mb-1">
-          <span className="text-[10px] font-black uppercase tracking-widest text-primary opacity-80">{product.brand}</span>
+      <div className={`p-6 flex flex-col flex-grow ${isRTL ? 'text-right' : 'text-left'}`}>
+        <div className="mb-2">
+          <span className="text-[10px] font-black uppercase tracking-widest text-primary/70">{product.brand}</span>
         </div>
-        <Link to={`/product/${product.id}`} className="block">
-          <h3 className="font-bold text-sm text-on-surface leading-snug mb-4 line-clamp-2 min-h-[40px] group-hover/card:text-primary transition-colors">
+        <Link to={`/product/${product.id}`} className="block mb-4">
+          <h3 className="font-bold text-sm text-secondary leading-snug line-clamp-2 min-h-[40px] group-hover/card:text-primary transition-colors">
             {productName}
           </h3>
         </Link>
         
-        <div className={`mt-auto flex items-center gap-3 ${isRTL ? 'flex-row-reverse justify-end' : ''}`}>
-          <div className="flex flex-col">
-            {hasDiscount && (
-              <span className="text-[11px] text-on-surface-variant/40 line-through font-bold mb-[-4px]">
-                {formatPrice(rawOriginalPrice)}
-              </span>
-            )}
-            <span className={`text-lg font-black tracking-tighter ${hasDiscount ? 'text-badge-sale' : 'text-on-surface'}`}>
-              {formatPrice(rawPrice)}
+        <div className={`mt-auto mb-6 flex flex-col gap-1 ${isRTL ? 'items-end' : 'items-start'}`}>
+          {hasDiscount && (
+            <span className="text-xs text-gray-300 line-through font-bold">
+              {formatPrice(rawOriginalPrice)}
             </span>
+          )}
+          <span className={`text-xl font-black italic tracking-tighter ${hasDiscount ? 'text-[#ff4d4d]' : 'text-secondary'}`}>
+            {formatPrice(rawPrice)}
+          </span>
+        </div>
+
+        {/* Action Controls - Visible on both Mobile & Desktop */}
+        <div className="space-y-4">
+          {hasFlavors && (
+            <div className="space-y-2">
+               <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 block ml-1">{isRTL ? 'اختر النكهة' : 'Select Flavor'}</label>
+               <select 
+                 value={selectedFlavor} 
+                 onChange={(e) => setSelectedFlavor(e.target.value)}
+                 className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-2.5 text-[10px] font-bold outline-none focus:border-primary transition-all appearance-none"
+               >
+                 <option value="">{isRTL ? '-- اختر --' : '-- Choose --'}</option>
+                 {flavors.map(f => <option key={f} value={f}>{f}</option>)}
+               </select>
+            </div>
+          )}
+
+          <div className="flex gap-2">
+            <button
+              onClick={handleAddToCart}
+              disabled={isOutOfStock}
+              className={`flex-grow flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${isOutOfStock ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-primary text-white hover:bg-primary-dark shadow-lg shadow-primary/20 active:scale-95'}`}
+            >
+              <ShoppingCart size={14} />
+              {isRTL ? 'أضف للسلة' : 'Add to Cart'}
+            </button>
+            <Link 
+              to={`/product/${product.id}`}
+              className="w-12 flex items-center justify-center bg-gray-50 text-secondary rounded-2xl hover:bg-secondary hover:text-white transition-all shadow-sm"
+            >
+              <Eye size={18} />
+            </Link>
           </div>
         </div>
       </div>

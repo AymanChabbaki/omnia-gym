@@ -10,7 +10,7 @@ export const languages = {
 };
 
 export const LanguageProvider = ({ children }) => {
-  const [currentLanguage, setCurrentLanguage] = useState(localStorage.getItem('omnia_lang') || 'en');
+  const [currentLanguage, setCurrentLanguage] = useState(localStorage.getItem('omnia_lang') || 'ar');
 
   useEffect(() => {
     localStorage.setItem('omnia_lang', currentLanguage);
