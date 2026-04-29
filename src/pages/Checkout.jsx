@@ -20,8 +20,8 @@ const Checkout = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const DELIVERY_FEE = 40.00;
-  const FINAL_TOTAL = cartTotal + DELIVERY_FEE;
+  const DELIVERY_FEE = 0;
+  const FINAL_TOTAL = cartTotal;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -156,11 +156,11 @@ const Checkout = () => {
               <div className="mt-6 pt-4 space-y-4 text-base font-bold text-on-surface-variant">
                 <div className={`flex justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <span>{t('checkout.subtotal')}</span>
-                  <span className="text-white">{new Intl.NumberFormat('fr-MA', { minimumFractionDigits: 2 }).format(cartTotal)} DH</span>
+                  <span className="">{new Intl.NumberFormat('fr-MA', { minimumFractionDigits: 2 }).format(cartTotal)} DH</span>
                 </div>
                 <div className={`flex justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <span>{t('checkout.delivery')}</span>
-                  <span className="text-white">40,00 DH</span>
+                  <span className="">{isRTL ? 'من 20 إلى 45 درهم (ستضاف عند التوصيل)' : 'Will be added (20 to 45 DH)'}</span>
                 </div>
                 <div className={`flex justify-between text-2xl font-black pt-4 border-t border-white/10 text-primary ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <span>{t('checkout.total')}</span>

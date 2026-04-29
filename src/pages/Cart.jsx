@@ -21,8 +21,8 @@ const Cart = () => {
     );
   }
 
-  const DELIVERY_FEE = 30.00;
-  const FINAL_TOTAL = cartTotal + DELIVERY_FEE;
+  const DELIVERY_FEE = 0;
+  const FINAL_TOTAL = cartTotal;
 
   return (
     <main className={`flex-grow pt-24 pb-32 px-4 md:px-8 max-w-7xl mx-auto w-full ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? 'rtl' : 'ltr'}>
@@ -97,7 +97,7 @@ const Cart = () => {
               </div>
               <div className="flex justify-between items-center text-on-surface-variant">
                 <span className="text-sm font-medium">{t('cart.delivery')}</span>
-                <span className="font-bold text-on-surface" dir="ltr">{new Intl.NumberFormat('fr-MA', { minimumFractionDigits: 2 }).format(DELIVERY_FEE)} DH</span>
+                <span className="font-bold text-on-surface text-sm" dir="ltr">{isRTL ? 'من 20 إلى 45 درهم (ستضاف لاحقاً)' : '20 to 45 DH (Will be added)'}</span>
               </div>
               <div className="pt-4 border-t border-outline-variant/20">
                 <div className="flex justify-between items-end">

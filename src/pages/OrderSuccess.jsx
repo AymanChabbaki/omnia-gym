@@ -158,7 +158,7 @@ const OrderSuccess = () => {
                </div>
                <div className={`flex justify-between items-center opacity-40 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('orderSuccess.delivery')}</span>
-                  <span className="font-bold text-lg" dir="ltr">{formattedPrice(order.delivery)}</span>
+                  <span className="font-bold text-sm" dir="ltr">{isRTL ? 'من 20 إلى 45 درهم (ستضاف لاحقاً)' : '20 to 45 DH (Will be added)'}</span>
                </div>
                <div className={`flex justify-between items-center pt-6 border-t border-white/10 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <span className="text-2xl font-black uppercase tracking-tighter italic">{t('orderSuccess.total')}</span>
