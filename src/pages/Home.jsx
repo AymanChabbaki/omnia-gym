@@ -78,7 +78,14 @@ const Home = () => {
   return (
     <div className="bg-white min-h-screen max-w-full overflow-hidden">
       {/* Pure Hero Carousel Section */}
-      <section className="relative h-[500px] md:h-[800px] overflow-hidden bg-white">
+      <section className="relative h-auto md:h-[800px] overflow-hidden bg-white">
+        {/* Spacer Ghost Image for Mobile Responsiveness to show full image */}
+        <img 
+          src={heroImages[currentHero]} 
+          className="w-full h-auto opacity-0 pointer-events-none block md:hidden"
+          alt="Spacer"
+        />
+
         <AnimatePresence mode="wait">
           <motion.div
             key={currentHero}
@@ -90,7 +97,7 @@ const Home = () => {
           >
             <img 
               src={heroImages[currentHero]} 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain md:object-cover"
               alt={`Hero ${currentHero + 1}`}
             />
           </motion.div>
@@ -110,23 +117,14 @@ const Home = () => {
           <ChevronRight size={24} className={isRTL ? 'rotate-180' : ''} />
         </button>
 
-        {/* Carousel Indicators - Responsive Miniatures */}
-        <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-2 md:gap-4 px-4 max-w-[95vw] overflow-x-auto md:overflow-visible scrollbar-none pb-2 md:pb-0">
-          {heroImages.map((img, i) => (
+        {/* Carousel Indicators - Minimal */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+          {heroImages.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrentHero(i)}
-              className={`relative rounded-xl overflow-hidden flex-shrink-0 transition-all duration-300 border-2 ${currentHero === i ? 'border-primary scale-110 shadow-2xl z-10' : 'border-white/30 hover:border-white/60 opacity-70 hover:opacity-100'} w-12 h-12 md:w-24 md:h-24`}
-            >
-              <img 
-                src={img} 
-                alt={`Thumbnail ${i + 1}`} 
-                className="w-full h-full object-cover"
-              />
-              {currentHero === i && (
-                <div className="absolute inset-0 bg-primary/10 ring-2 ring-primary ring-inset" />
-              )}
-            </button>
+              className={`h-1 transition-all duration-300 rounded-full ${currentHero === i ? 'w-8 bg-primary' : 'w-2 bg-black/20'}`}
+            />
           ))}
         </div>
       </section>
