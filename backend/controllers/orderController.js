@@ -20,6 +20,24 @@ export const createOrder = async (req, res, next) => {
 
     const orderItems = [];
     for (const item of items) {
+      // Check stock availability
+      const productRes = await client.query('SELECT stock FROM products WHERE id = $1', [item.id]);
+      if (productRes.rows.length === 0) {
+        throw new Error(`Product with ID ${item.id} not found`);
+      }
+      
+      const currentStock = productRes.rows[0].stock;
+      if (currentStock < item.quantity) {
+        throw new Error(`Insufficient stock for product: ${item.name_en || item.name}. Available: ${currentStock}`);
+      }
+
+      // Decrease stock
+      await client.query(
+        'UPDATE products SET stock = stock - $1 WHERE id = $2',
+        [item.quantity, item.id]
+      );
+
+      // Insert order item
       const itemRes = await client.query(
         `INSERT INTO order_items (order_id, product_id, product_name, quantity, price, flavor) 
          VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
@@ -31,6 +49,7 @@ export const createOrder = async (req, res, next) => {
     await client.query('COMMIT');
     
     // Send email notification (non-blocking)
+    console.log(`Order ${orderId} created successfully. Triggering email...`);
     sendOrderEmail(orderRes.rows[0], orderItems).catch(err => console.error('Email service error:', err));
 
     res.status(201).json(orderRes.rows[0]);
