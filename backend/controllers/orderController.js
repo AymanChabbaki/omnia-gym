@@ -1,4 +1,5 @@
 import pool from '../config/db.js';
+import { sendOrderEmail } from '../utils/emailService.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -17,15 +18,21 @@ export const createOrder = async (req, res, next) => {
 
     const orderId = orderRes.rows[0].id;
 
+    const orderItems = [];
     for (const item of items) {
-      await client.query(
+      const itemRes = await client.query(
         `INSERT INTO order_items (order_id, product_id, product_name, quantity, price, flavor) 
-         VALUES ($1, $2, $3, $4, $5, $6)`,
+         VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
         [orderId, item.id, item.name_en || item.name, item.quantity, item.price, item.flavor]
       );
+      orderItems.push(itemRes.rows[0]);
     }
 
     await client.query('COMMIT');
+    
+    // Send email notification (non-blocking)
+    sendOrderEmail(orderRes.rows[0], orderItems).catch(err => console.error('Email service error:', err));
+
     res.status(201).json(orderRes.rows[0]);
   } catch (error) {
     await client.query('ROLLBACK');
