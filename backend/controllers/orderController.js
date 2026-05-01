@@ -48,9 +48,14 @@ export const createOrder = async (req, res, next) => {
 
     await client.query('COMMIT');
     
-    // Send email notification (non-blocking)
-    console.log(`Order ${orderId} created successfully. Triggering email...`);
-    sendOrderEmail(orderRes.rows[0], orderItems).catch(err => console.error('Email service error:', err));
+    // Send email notification (BLOCKING for debugging)
+    console.log(`Order ${orderId} created successfully. Sending email...`);
+    try {
+      await sendOrderEmail(orderRes.rows[0], orderItems);
+      console.log(`Email process completed for Order ${orderId}`);
+    } catch (emailErr) {
+      console.error(`Email failed for Order ${orderId}:`, emailErr);
+    }
 
     res.status(201).json(orderRes.rows[0]);
   } catch (error) {

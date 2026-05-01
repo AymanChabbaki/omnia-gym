@@ -16,14 +16,22 @@ const transporter = nodemailer.createTransport({
 
 const generateInvoicePDF = (order, items) => {
   return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({ margin: 50 });
-    let chunks = [];
+    try {
+      console.log(`Generating PDF for Order #${order.id}...`);
+      const doc = new PDFDocument({ margin: 50 });
+      let chunks = [];
 
-    doc.on('data', (chunk) => chunks.push(chunk));
-    doc.on('end', () => resolve(Buffer.concat(chunks)));
-    doc.on('error', (err) => reject(err));
+      doc.on('data', (chunk) => chunks.push(chunk));
+      doc.on('end', () => {
+        console.log(`PDF generation finished for Order #${order.id}`);
+        resolve(Buffer.concat(chunks));
+      });
+      doc.on('error', (err) => {
+        console.error('PDF Doc Error:', err);
+        reject(err);
+      });
 
-    // Header
+      // Header
     doc.fillColor('#444444')
        .fontSize(20)
        .text('OMNIA GYM SHOP', 110, 57)
@@ -109,6 +117,10 @@ const generateInvoicePDF = (order, items) => {
        .text('Thank you for your business!', 50, 700, { align: 'center', width: 500 });
 
     doc.end();
+    } catch (err) {
+      console.error('PDF Generation Error:', err);
+      reject(err);
+    }
   });
 };
 
