@@ -15,7 +15,7 @@ const Navbar = () => {
     const loadCategories = async () => {
       try {
         const cats = await fetchCategories();
-        setCategories(cats.slice(0, 10)); // Keeping it slim as requested
+        setCategories(cats.slice(0, 7)); // Keeping it slim as requested
       } catch (err) {
         console.error(err);
       }
