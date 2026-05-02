@@ -44,14 +44,29 @@ const ProductCard = ({ product }) => {
 
   return (
     <motion.div 
-      className="product-card flex flex-col h-full group/card bg-white rounded-3xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500"
-      whileHover={{ y: -5 }}
+      className="product-card flex flex-col h-full group/card bg-white rounded-3xl overflow-hidden border border-gray-100 transition-all duration-500"
+      initial="initial"
+      whileHover="hover"
+      whileTap="tap"
+      variants={{
+        initial: { y: 0, boxShadow: "0 4px 20px rgba(0,0,0,0.03)" },
+        hover: { 
+          y: -10, 
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.1)",
+          borderColor: "rgba(76, 175, 80, 0.2)"
+        },
+        tap: { scale: 0.98 }
+      }}
     >
       {/* Image Section */}
       <div className="card-image aspect-square relative p-6 bg-white overflow-hidden flex items-center justify-center">
         <Link to={`/product/${product.id}`} className="block w-full h-full">
-          <img 
-            className="w-full h-full object-contain transition-transform duration-700 group-hover/card:scale-110 mix-blend-multiply contrast-[1.16]" 
+          <motion.img 
+            className="w-full h-full object-contain mix-blend-multiply contrast-[1.16]" 
+            variants={{
+              hover: { scale: 1.1 }
+            }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
             src={productImage} 
             alt={productName} 
             onError={(e) => { e.target.src = 'https://proteinhouse-offers.com/wp-content/uploads/woocommerce-placeholder.png'; }}
@@ -72,7 +87,13 @@ const ProductCard = ({ product }) => {
         </div>
 
         {/* Quick Actions Hover */}
-        <div className="absolute inset-0 bg-secondary/5 group-hover/card:bg-secondary/0 transition-all pointer-events-none" />
+        <motion.div 
+          className="absolute inset-0 pointer-events-none" 
+          variants={{
+            initial: { backgroundColor: "rgba(0, 74, 153, 0.05)" },
+            hover: { backgroundColor: "rgba(0, 74, 153, 0)" }
+          }}
+        />
       </div>
       
       <div className={`p-6 flex flex-col flex-grow ${isRTL ? 'text-right' : 'text-left'}`}>
@@ -80,9 +101,15 @@ const ProductCard = ({ product }) => {
           <span className="text-[10px] font-black uppercase tracking-widest text-primary/70">{product.brand}</span>
         </div>
         <Link to={`/product/${product.id}`} className="block mb-4">
-          <h3 className="font-bold text-sm text-secondary leading-snug line-clamp-2 min-h-[40px] group-hover/card:text-primary transition-colors">
+          <motion.h3 
+            className="font-bold text-sm leading-snug line-clamp-2 min-h-[40px] transition-colors"
+            variants={{
+              initial: { color: "#004a99" },
+              hover: { color: "#4CAF50" }
+            }}
+          >
             {productName}
-          </h3>
+          </motion.h3>
         </Link>
         
         <div className={`mt-auto mb-6 flex flex-col gap-1 ${isRTL ? 'items-end' : 'items-start'}`}>
