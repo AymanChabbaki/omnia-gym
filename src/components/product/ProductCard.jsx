@@ -85,15 +85,6 @@ const ProductCard = ({ product }) => {
             </span>
           )}
         </div>
-
-        {/* Quick Actions Hover */}
-        <motion.div 
-          className="absolute inset-0 pointer-events-none" 
-          variants={{
-            initial: { backgroundColor: "rgba(0, 74, 153, 0.05)" },
-            hover: { backgroundColor: "rgba(0, 74, 153, 0)" }
-          }}
-        />
       </div>
       
       <div className={`p-6 flex flex-col flex-grow ${isRTL ? 'text-right' : 'text-left'}`}>
