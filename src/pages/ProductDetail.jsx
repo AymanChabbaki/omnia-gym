@@ -73,12 +73,12 @@ const ProductDetail = () => {
             transition={{ duration: 0.8 }}
             className={`lg:col-span-7 grid grid-cols-12 gap-4 ${isRTL ? 'order-last lg:order-none' : ''}`}
           >
-            <div className="col-span-12 relative overflow-hidden rounded-xl aspect-[4/5] bg-surface-container">
+            <div className="col-span-12 relative overflow-hidden rounded-xl aspect-[4/5] bg-white border border-gray-100">
               <motion.img 
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 1.5 }}
-                className="w-full h-full object-contain p-8" /* Upgraded to object-contain for multi-ratio DB strings */ 
+                className="w-full h-full object-contain p-8 mix-blend-multiply contrast-[1.05]" /* Upgraded to object-contain for multi-ratio DB strings */ 
                 src={product.images ? product.images[0] : '/placeholder.png'} 
                 alt={getLocalized(product, 'name')} 
               />
@@ -92,10 +92,10 @@ const ProductDetail = () => {
               <motion.div 
                 key={i} 
                 whileHover={{ scale: 1.05 }}
-                className="col-span-4 rounded-xl overflow-hidden aspect-square bg-surface-container-high cursor-pointer p-4"
+                className="col-span-4 rounded-xl overflow-hidden aspect-square bg-white border border-gray-100 cursor-pointer p-4"
               >
                 <img 
-                  className="w-full h-full object-contain" 
+                  className="w-full h-full object-contain mix-blend-multiply contrast-[1.05]" 
                   src={img} 
                   alt={`${getLocalized(product, 'name')} gallery ${i}`} 
                 />

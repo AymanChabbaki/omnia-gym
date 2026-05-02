@@ -35,8 +35,8 @@ const Cart = () => {
         <div className="lg:col-span-8 space-y-6">
           {cartItems.map((item, index) => (
             <div key={`${item.id}-${index}`} className={`group relative flex flex-col md:flex-row gap-6 p-6 bg-surface-container rounded-xl transition-all duration-300 hover:bg-surface-container-high border-primary ${isRTL ? 'border-r-4' : 'border-l-4 border-transparent hover:border-primary'}`}>
-              <div className="w-full md:w-40 h-40 bg-surface-container-low rounded-lg overflow-hidden flex-shrink-0">
-                <img alt={getLocalized(item, 'name')} className="w-full h-full object-cover" src={item.images && item.images.length > 0 ? item.images[0] : '/placeholder.png'} />
+              <div className="w-full md:w-40 h-40 bg-white rounded-lg overflow-hidden flex-shrink-0 border border-gray-50">
+                <img alt={getLocalized(item, 'name')} className="w-full h-full object-contain mix-blend-multiply contrast-[1.05]" src={item.images && item.images.length > 0 ? item.images[0] : '/placeholder.png'} />
               </div>
               <div className="flex-grow flex flex-col justify-between py-2">
                 <div className="flex justify-between items-start w-full">

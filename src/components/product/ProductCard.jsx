@@ -51,7 +51,7 @@ const ProductCard = ({ product }) => {
       <div className="card-image aspect-square relative p-6 bg-white overflow-hidden flex items-center justify-center">
         <Link to={`/product/${product.id}`} className="block w-full h-full">
           <img 
-            className="w-full h-full object-contain transition-transform duration-700 group-hover/card:scale-110" 
+            className="w-full h-full object-contain transition-transform duration-700 group-hover/card:scale-110 mix-blend-multiply contrast-[1.05]" 
             src={productImage} 
             alt={productName} 
             onError={(e) => { e.target.src = 'https://proteinhouse-offers.com/wp-content/uploads/woocommerce-placeholder.png'; }}
