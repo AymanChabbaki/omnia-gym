@@ -151,9 +151,9 @@ const Home = () => {
       {/* Brand Ticker */}
       <section className="py-16 bg-white overflow-hidden border-b border-gray-100">
         <div className="relative">
-          <div className="flex animate-scroll gap-24 items-center grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
-            {[...brandLogos, ...brandLogos].map((logo, i) => (
-              <img key={i} src={logo} alt="Brand" className="h-10 md:h-16 w-auto object-contain" />
+          <div className="flex animate-scroll gap-12 md:gap-24 items-center grayscale opacity-30 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+            {[...brandLogos, ...brandLogos, ...brandLogos].map((logo, i) => (
+              <img key={i} src={logo} alt="Brand" className="h-8 md:h-16 w-auto object-contain flex-shrink-0" />
             ))}
           </div>
         </div>

@@ -66,15 +66,17 @@
 }
 
 /* Animations */
-@keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
 .animate-scroll {
   display: flex;
   width: max-content;
+  flex-wrap: nowrap;
   animation: scroll 40s linear infinite;
+  will-change: transform;
+}
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% / 3)); }
 }
 
 .animate-scroll:hover {
