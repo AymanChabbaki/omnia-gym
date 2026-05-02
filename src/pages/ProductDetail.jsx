@@ -78,7 +78,7 @@ const ProductDetail = () => {
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 1.5 }}
-                className="w-full h-full object-contain p-8 mix-blend-multiply contrast-[1.2] brightness-[1.02]" /* Upgraded to object-contain for multi-ratio DB strings */ 
+                className="w-full h-full object-contain p-8" /* Upgraded to object-contain for multi-ratio DB strings */ 
                 src={product.images ? product.images[0] : '/placeholder.png'} 
                 alt={getLocalized(product, 'name')} 
               />
@@ -95,7 +95,7 @@ const ProductDetail = () => {
                 className="col-span-4 rounded-xl overflow-hidden aspect-square bg-white border border-gray-100 cursor-pointer p-4"
               >
                 <img 
-                  className="w-full h-full object-contain mix-blend-multiply contrast-[1.2] brightness-[1.02]" 
+                  className="w-full h-full object-contain" 
                   src={img} 
                   alt={`${getLocalized(product, 'name')} gallery ${i}`} 
                 />

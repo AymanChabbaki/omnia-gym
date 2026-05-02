@@ -59,10 +59,10 @@ const ProductCard = ({ product }) => {
       }}
     >
       {/* Image Section */}
-      <div className="card-image aspect-square relative p-6 bg-white overflow-hidden flex items-center justify-center" style={{ isolation: 'isolate' }}>
+      <div className="card-image aspect-square relative p-6 bg-white overflow-hidden flex items-center justify-center">
         <Link to={`/product/${product.id}`} className="block w-full h-full">
           <motion.img 
-            className="w-full h-full object-contain mix-blend-multiply contrast-[1.2] brightness-[1.02]" 
+            className="w-full h-full object-contain" 
             variants={{
               hover: { scale: 1.1 }
             }}
