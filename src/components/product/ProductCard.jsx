@@ -44,7 +44,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <motion.div 
-      className="product-card flex flex-col h-full group/card bg-white rounded-3xl overflow-hidden border border-gray-100 transition-all duration-500"
+      className="product-card flex flex-col h-full group/card bg-white rounded-3xl overflow-hidden border border-gray-100"
       initial="initial"
       whileHover="hover"
       whileTap="tap"
@@ -59,7 +59,7 @@ const ProductCard = ({ product }) => {
       }}
     >
       {/* Image Section */}
-      <div className="card-image aspect-square relative p-6 bg-white overflow-hidden flex items-center justify-center">
+      <div className="card-image aspect-square relative p-6 bg-white overflow-hidden flex items-center justify-center" style={{ isolation: 'isolate' }}>
         <Link to={`/product/${product.id}`} className="block w-full h-full">
           <motion.img 
             className="w-full h-full object-contain mix-blend-multiply contrast-[1.16]" 

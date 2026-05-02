@@ -36,7 +36,7 @@ html, body {
 
 @layer components {
   .product-card {
-    @apply bg-white border border-black/5 rounded-2xl overflow-hidden transition-all duration-300;
+    @apply bg-white border border-black/5 rounded-2xl overflow-hidden;
     box-shadow: 0 4px 20px rgba(0,0,0,0.03);
   }
 
