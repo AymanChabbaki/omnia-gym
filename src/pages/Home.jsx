@@ -73,6 +73,8 @@ const Home = () => {
     '/biotechusa.svg',
     '/scitec.png',
     '/applied.png',
+    '/tesla.webp',
+    '/naofood.webp'
   ];
 
   return (
