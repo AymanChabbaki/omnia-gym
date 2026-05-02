@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
+  --color-white: #ffffff;
+  --color-background: #ffffff;
   --color-primary: #4CAF50;
   --color-primary-dark: #388E3C;
   --color-secondary: #004a99;
@@ -23,10 +25,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap');
 
 @layer base {
-html, body {
-    @apply bg-white text-on-surface antialiased;
+  html, body, #root {
+    background-color: #ffffff !important;
+    @apply text-on-surface antialiased;
     font-family: var(--font-sans);
-    background-color: white !important;
   }
 
   h1, h2, h3, h4, .font-headline {
@@ -87,7 +89,7 @@ html, body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-gray-50;
+  @apply bg-white;
 }
 ::-webkit-scrollbar-thumb {
   @apply bg-gray-200 rounded-full hover:bg-gray-300 transition-colors;

@@ -136,7 +136,7 @@ const Home = () => {
         <div className="max-w-1400 mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((f, i) => (
             <div key={i} className={`flex items-center gap-5 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
-              <div className="w-16 h-16 rounded-3xl bg-gray-50 flex items-center justify-center text-primary shadow-inner">
+              <div className="w-16 h-16 rounded-3xl bg-white border border-gray-100 flex items-center justify-center text-primary shadow-sm">
                 {f.icon}
               </div>
               <div>
@@ -172,7 +172,7 @@ const Home = () => {
               </p>
             </div>
             
-            <div className="flex bg-gray-100 p-2 rounded-2xl gap-1">
+            <div className="flex bg-white border border-gray-100 p-2 rounded-2xl gap-1 shadow-sm">
               <button 
                 onClick={() => setActiveTab('all')}
                 className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${activeTab === 'all' ? 'bg-white shadow-xl text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}

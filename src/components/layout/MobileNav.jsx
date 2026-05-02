@@ -96,7 +96,7 @@ const MobileNav = ({ isOpen, onClose, categories }) => {
             </div>
 
             {/* Footer Information */}
-            <div className="p-8 bg-gray-50 mt-auto">
+            <div className="p-8 bg-white border-t border-gray-50 mt-auto">
               <div className={`flex flex-wrap gap-4 mb-6 ${isRTL ? 'justify-end' : ''}`}>
                 {footerLinks.map((link, i) => (
                   <Link key={i} to={link.path} onClick={onClose} className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-secondary">

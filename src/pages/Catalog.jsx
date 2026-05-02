@@ -72,7 +72,7 @@ const Catalog = () => {
               <li>
                 <button 
                   onClick={() => handleCategoryChange('all')}
-                  className={`w-full text-left px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${isRTL ? 'text-right' : ''} ${selectedCategory === 'all' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-gray-50 text-on-surface-variant hover:bg-gray-100'}`}
+                  className={`w-full text-left px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${isRTL ? 'text-right' : ''} ${selectedCategory === 'all' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white border border-gray-100 text-on-surface-variant hover:bg-gray-50'}`}
                 >
                   {isRTL ? 'كل المنتجات' : 'All Products'}
                 </button>
@@ -81,7 +81,7 @@ const Catalog = () => {
                 <li key={cat.id}>
                   <button 
                     onClick={() => handleCategoryChange(cat.id)}
-                    className={`w-full text-left px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${isRTL ? 'text-right' : ''} ${selectedCategory === cat.id ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-gray-100/50 text-on-surface-variant hover:bg-gray-100'}`}
+                    className={`w-full text-left px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${isRTL ? 'text-right' : ''} ${selectedCategory === cat.id ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-white border border-gray-100 text-on-surface-variant hover:bg-gray-50'}`}
                   >
                     {getLocalized(cat, 'name')}
                   </button>
