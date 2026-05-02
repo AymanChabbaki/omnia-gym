@@ -32,7 +32,7 @@ const OrderSuccess = () => {
   };
 
   return (
-    <main className={`min-h-screen bg-gray-50 pt-32 pb-20 px-4 md:px-8 max-w-5xl mx-auto ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+    <main className={`min-h-screen bg-white pt-32 pb-20 px-4 md:px-8 max-w-5xl mx-auto ${isRTL ? 'text-right' : 'text-left'}`} dir={isRTL ? 'rtl' : 'ltr'}>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="print:hidden">
         
         <div className="text-center mb-12">

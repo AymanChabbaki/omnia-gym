@@ -107,7 +107,7 @@ const ProductDetail = () => {
             variants={stagger}
             initial="hidden"
             animate="visible"
-            className={`lg:col-span-5 lg:sticky lg:top-40 ${isRTL ? 'text-right' : 'text-left'}`}
+            className={`lg:col-span-5 lg:sticky lg:top-40 bg-white p-8 rounded-3xl border border-gray-100 shadow-xl ${isRTL ? 'text-right' : 'text-left'}`}
           >
             <motion.h1 
               variants={fadeIn}
@@ -135,7 +135,7 @@ const ProductDetail = () => {
             {product.tags && product.tags.length > 0 && (
                <div className={`flex flex-wrap gap-2 mb-8 ${isRTL ? 'flex-row-reverse' : ''}`}>
                  {product.tags.map(tag => (
-                   <span key={tag} className="px-3 py-1 bg-surface-container-high rounded text-xs font-bold uppercase text-primary">
+                   <span key={tag} className="px-3 py-1 bg-gray-50 border border-gray-100">
                      {tag}
                    </span>
                  ))}
@@ -153,7 +153,7 @@ const ProductDetail = () => {
                         key={flavor}
                         onClick={() => setSelectedFlavor(flavor)}
                         className={`px-6 py-3 rounded-lg font-black uppercase text-xs tracking-widest transition-all ${
-                          selectedFlavor === flavor ? 'bg-primary text-on-primary ring-2 ring-primary ring-offset-4 ring-offset-surface' : 'bg-surface-container-high text-on-surface hover:bg-surface-container-highest'
+                          selectedFlavor === flavor ? 'bg-primary text-on-primary ring-2 ring-primary ring-offset-4 ring-offset-surface' : 'bg-gray-50 text-on-surface hover:bg-gray-100 border border-gray-100'
                         }`}
                       >
                         {flavor}
@@ -178,7 +178,7 @@ const ProductDetail = () => {
               }}
               className={`w-full py-6 rounded-xl font-black uppercase text-xl tracking-tighter italic flex items-center justify-center gap-3 transition-all group shadow-[0_20px_50px_rgba(244,255,198,0.2)] ${isRTL ? 'flex-row-reverse' : ''} ${
                 (product.flavors && product.flavors.length > 0 && !selectedFlavor) 
-                ? 'bg-surface-container-highest text-on-surface-variant cursor-not-allowed grayscale' 
+                ? 'bg-gray-100 text-on-surface-variant cursor-not-allowed grayscale border border-gray-100' 
                 : 'bg-primary text-on-primary'
               }`}
             >
@@ -189,11 +189,11 @@ const ProductDetail = () => {
 
             {/* Trust Chips */}
             <motion.div variants={fadeIn} className="grid grid-cols-2 gap-4 mt-8">
-              <div className={`flex items-center gap-3 p-4 bg-surface-container-low rounded-lg border border-outline-variant/10 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
+              <div className={`flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
                 <span className="material-symbols-outlined text-secondary">bolt</span>
                 <span className="text-[10px] font-black uppercase tracking-widest">{t('product.fastRecovery')}</span>
               </div>
-              <div className={`flex items-center gap-3 p-4 bg-surface-container-low rounded-lg border border-outline-variant/10 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
+              <div className={`flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100 ${isRTL ? 'flex-row-reverse text-right' : ''}`}>
                 <span className="material-symbols-outlined text-secondary">verified</span>
                 <span className="text-[10px] font-black uppercase tracking-widest">{t('product.performanceLabel')}</span>
               </div>
