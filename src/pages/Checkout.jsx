@@ -98,35 +98,35 @@ const Checkout = () => {
         </div>
 
         {/* FORM MODULE */}
-        <motion.div initial={{ opacity: 0, x: isRTL ? 20 : -20 }} animate={{ opacity: 1, x: 0 }} className="bg-white p-8 rounded-3xl border border-gray-100 shadow-2xl">
+        <motion.div initial={{ opacity: 0, x: isRTL ? 20 : -20 }} animate={{ opacity: 1, x: 0 }} className="bg-surface-container p-8 rounded-3xl border border-white/5 shadow-2xl">
           <h2 className="text-3xl font-black uppercase mb-8 text-primary">{t('checkout.billingDetails')}</h2>
           <form className="space-y-6" onSubmit={handleCompleteOrder}>
             <div className="space-y-2">
               <label className="text-sm font-bold opacity-80 block">{t('checkout.fullName')} *</label>
-              <input required name="fullName" value={formData.fullName} onChange={handleChange} className={`w-full bg-gray-50 border border-gray-100 rounded-lg p-4 outline-none focus:border-primary transition-colors ${isRTL ? 'text-right' : 'text-left'}`} />
+              <input required name="fullName" value={formData.fullName} onChange={handleChange} className={`w-full bg-surface-container-high border border-outline-variant/30 rounded-lg p-4 outline-none focus:border-primary transition-colors ${isRTL ? 'text-right' : 'text-left'}`} />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold opacity-80 block">{t('checkout.address')} *</label>
-              <input required name="address" value={formData.address} onChange={handleChange} className={`w-full bg-gray-50 border border-gray-100 rounded-lg p-4 outline-none focus:border-primary transition-colors ${isRTL ? 'text-right' : 'text-left'}`} placeholder={isRTL ? "اسم الشارع، رقم المنزل، تفاصيل العنوان" : "Street name, house number, details"} />
+              <input required name="address" value={formData.address} onChange={handleChange} className={`w-full bg-surface-container-high border border-outline-variant/30 rounded-lg p-4 outline-none focus:border-primary transition-colors ${isRTL ? 'text-right' : 'text-left'}`} placeholder={isRTL ? "اسم الشارع، رقم المنزل، تفاصيل العنوان" : "Street name, house number, details"} />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold opacity-80 block">{t('checkout.city')} *</label>
-              <input required name="city" value={formData.city} onChange={handleChange} className={`w-full bg-gray-50 border border-gray-100 rounded-lg p-4 outline-none focus:border-primary transition-colors ${isRTL ? 'text-right' : 'text-left'}`} />
+              <input required name="city" value={formData.city} onChange={handleChange} className={`w-full bg-surface-container-high border border-outline-variant/30 rounded-lg p-4 outline-none focus:border-primary transition-colors ${isRTL ? 'text-right' : 'text-left'}`} />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold opacity-80 block">{t('checkout.phone')} *</label>
-              <input required name="phone" type="tel" value={formData.phone} onChange={handleChange} className={`w-full bg-gray-50 border border-gray-100 rounded-lg p-4 outline-none focus:border-primary transition-colors ${isRTL ? 'text-right' : 'text-left'}`} dir="ltr" />
+              <input required name="phone" type="tel" value={formData.phone} onChange={handleChange} className={`w-full bg-surface-container-high border border-outline-variant/30 rounded-lg p-4 outline-none focus:border-primary transition-colors ${isRTL ? 'text-right' : 'text-left'}`} dir="ltr" />
             </div>
             <div className="space-y-2 pt-4">
               <label className="text-sm font-bold opacity-80 block">{t('checkout.notes')}</label>
-              <textarea name="notes" value={formData.notes} onChange={handleChange} rows="3" className={`w-full bg-gray-50 border border-gray-100 rounded-lg p-4 outline-none focus:border-primary transition-colors ${isRTL ? 'text-right' : 'text-left'}`} />
+              <textarea name="notes" value={formData.notes} onChange={handleChange} rows="3" className={`w-full bg-surface-container-high border border-outline-variant/30 rounded-lg p-4 outline-none focus:border-primary transition-colors ${isRTL ? 'text-right' : 'text-left'}`} />
             </div>
           </form>
         </motion.div>
 
         {/* ORDER SUMMARY */}
         <motion.div id="order-summary" initial={{ opacity: 0, x: isRTL ? -20 : 20 }} animate={{ opacity: 1, x: 0 }} className="flex flex-col gap-6 lg:sticky lg:top-28">
-          <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-xl overflow-hidden relative">
+          <div className="bg-surface-container-high p-8 rounded-3xl border border-primary/20 shadow-xl overflow-hidden relative">
             <h2 className="text-2xl font-black uppercase mb-8">{t('checkout.yourOrder')}</h2>
             
             <div className="w-full text-sm">

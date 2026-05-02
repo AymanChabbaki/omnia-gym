@@ -34,7 +34,7 @@ const Cart = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         <div className="lg:col-span-8 space-y-6">
           {cartItems.map((item, index) => (
-            <div key={`${item.id}-${index}`} className={`group relative flex flex-col md:flex-row gap-6 p-6 bg-white border border-gray-100 ${isRTL ? 'border-r-4' : 'border-l-4 border-transparent hover:border-primary'}`}>
+            <div key={`${item.id}-${index}`} className={`group relative flex flex-col md:flex-row gap-6 p-6 bg-surface-container rounded-xl transition-all duration-300 hover:bg-surface-container-high border-primary ${isRTL ? 'border-r-4' : 'border-l-4 border-transparent hover:border-primary'}`}>
               <div className="w-full md:w-40 h-40 bg-white rounded-lg overflow-hidden flex-shrink-0 border border-gray-50">
                 <img alt={getLocalized(item, 'name')} className="w-full h-full object-contain" src={item.images && item.images.length > 0 ? item.images[0] : '/placeholder.png'} />
               </div>
@@ -88,7 +88,7 @@ const Cart = () => {
         </div>
 
         <div className="lg:col-span-4 lg:sticky lg:top-28">
-          <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+          <div className="bg-surface-container-high p-8 rounded-2xl shadow-2xl">
             <h2 className="font-headline text-2xl font-black text-on-surface uppercase mb-8">{t('checkout.yourOrder')}</h2>
             <div className="space-y-4 mb-8">
               <div className="flex justify-between items-center text-on-surface-variant">
