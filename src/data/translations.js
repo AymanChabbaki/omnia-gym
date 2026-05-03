@@ -48,7 +48,7 @@ export const translations = {
       bestSeller: "Best Seller",
       verifiedPure: "Verified Pure",
       fastRecovery: "Fast Recovery",
-      performanceLabel: "Banned Substance Tested",
+      performanceLabel: "Approved by the Ministry of Health",
     },
     home: {
       heroTitle: "Fuel Your Ambition",
@@ -172,7 +172,7 @@ export const translations = {
       bestSeller: "الأكثر مبيعاً",
       verifiedPure: "نقي وموثق",
       fastRecovery: "استشفاء سريع",
-      performanceLabel: "مفحوص من المنشطات",
+      performanceLabel: "مصادق عليه من طرف وزارة الصحة",
     },
     home: {
       heroTitle: "غذي طموحك",
@@ -296,7 +296,7 @@ export const translations = {
       bestSeller: "Meilleure Vente",
       verifiedPure: "Pureté Vérifiée",
       fastRecovery: "Récupération Rapide",
-      performanceLabel: "Testé Anti-Dopage",
+      performanceLabel: "Approuvé par le ministère de la Santé",
     },
     home: {
       heroTitle: "Nourrissez Votre Ambition",
