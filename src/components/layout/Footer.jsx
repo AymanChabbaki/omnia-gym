@@ -25,10 +25,10 @@ const Footer = () => {
               : 'Your #1 shop for high-quality nutrition supplements in Morocco. We care about your health and performance.'}
           </p>
           <div className={`flex items-center gap-4 ${isRTL ? 'justify-end' : ''}`}>
-            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-all text-white">
+            <a href="https://www.facebook.com/share/1LArvhpzGM/?mibextid=wwXIfr" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-all text-white">
               <FaFacebookF size={18} />
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-all text-white">
+            <a href="https://www.instagram.com/omniagym_officiel?igsh=NzFwZHpjMTR6eTA4&utm_source=ig_contact_invite" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary transition-all text-white">
               <FaInstagram size={18} />
             </a>
           </div>
@@ -83,7 +83,7 @@ const Footer = () => {
               <Mail size={14} className="text-primary mt-0.5" />
               <div>
                 <p className="text-[9px] text-white/30 uppercase font-black">{isRTL ? 'البريد الإلكتروني' : 'Email'}</p>
-                <p className="text-[11px] font-bold">contact@omniagym.ma</p>
+                <p className="text-[11px] font-bold">omnia.gym.shop@gmail.com</p>
               </div>
             </div>
           </div>

@@ -33,8 +33,8 @@ const TopBar = () => {
             <span className="hidden xs:inline" dir="ltr">0661349808</span>
           </a>
           <div className="hidden md:flex items-center gap-4 border-l border-white/20 pl-6 ml-2">
-            <a href="#" className="hover:text-primary transition-all"><FaFacebookF size={14} /></a>
-            <a href="#" className="hover:text-primary transition-all"><FaInstagram size={14} /></a>
+            <a href="https://www.facebook.com/share/1LArvhpzGM/?mibextid=wwXIfr" className="hover:text-primary transition-all"><FaFacebookF size={14} /></a>
+            <a href="https://www.instagram.com/omniagym_officiel?igsh=NzFwZHpjMTR6eTA4&utm_source=ig_contact_invite" className="hover:text-primary transition-all"><FaInstagram size={14} /></a>
           </div>
         </div>
 
