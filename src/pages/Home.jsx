@@ -15,12 +15,10 @@ const Home = () => {
 
   // Hero Carousel State
   const heroImages = [
-    '/hero11.png',
-    '/hero9.png',
-    '/hero7.png',
-    '/hero8.png',
-    '/hero6.png',
-    '/hero5.png'
+    '/1.jpeg',
+    '/2.jpeg',
+    '/3.jpeg',
+    '/4.jpeg',
   ];
   const [currentHero, setCurrentHero] = useState(0);
 
