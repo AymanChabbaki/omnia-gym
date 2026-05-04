@@ -78,11 +78,11 @@ const Home = () => {
   return (
     <div className="bg-white min-h-screen max-w-full overflow-hidden">
       {/* Pure Hero Carousel Section */}
-      <section className="relative h-auto md:h-[800px] overflow-hidden bg-white">
-        {/* Spacer Ghost Image for Mobile Responsiveness to show full image */}
+      <section className="relative h-auto overflow-hidden bg-white">
+        {/* Spacer Ghost Image for Responsiveness to show full image */}
         <img 
           src={heroImages[currentHero]} 
-          className="w-full h-auto opacity-0 pointer-events-none block md:hidden"
+          className="w-full h-auto max-h-[85vh] object-contain opacity-0 pointer-events-none mx-auto"
           alt="Spacer"
         />
 
@@ -93,11 +93,11 @@ const Home = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1 }}
-            className="absolute inset-0 z-0"
+            className="absolute inset-0 z-0 flex items-center justify-center bg-gray-50/30"
           >
             <img 
               src={heroImages[currentHero]} 
-              className="w-full h-full object-contain md:object-cover"
+              className="w-full h-full object-contain"
               alt={`Hero ${currentHero + 1}`}
             />
           </motion.div>
