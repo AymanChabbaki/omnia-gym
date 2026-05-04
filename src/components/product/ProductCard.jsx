@@ -12,7 +12,9 @@ const ProductCard = ({ product }) => {
 
   if (!product) return null;
 
-  const flavors = Array.isArray(product.flavors) ? product.flavors : [];
+  const flavors = Array.isArray(product.flavors) 
+    ? product.flavors.filter(f => typeof f === 'string' && f.trim() !== '') 
+    : (typeof product.flavors === 'string' ? product.flavors.split(',').map(s => s.trim()).filter(Boolean) : []);
   const hasFlavors = flavors.length > 0;
   const isOutOfStock = typeof product.stock === 'number' && product.stock <= 0;
   const rawPrice = Number(product.price) || 0;
@@ -39,7 +41,7 @@ const ProductCard = ({ product }) => {
       alert(isRTL ? 'الرجاء اختيار النكهة أولاً' : 'Please select a flavor first');
       return;
     }
-    addToCart(product, 1, selectedFlavor);
+    addToCart({ ...product, flavor: selectedFlavor });
   };
 
   return (

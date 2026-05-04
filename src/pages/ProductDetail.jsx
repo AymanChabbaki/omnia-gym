@@ -13,6 +13,11 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedFlavor, setSelectedFlavor] = useState('');
+  
+  const flavors = product ? (Array.isArray(product.flavors) 
+    ? product.flavors.filter(f => typeof f === 'string' && f.trim() !== '') 
+    : (typeof product.flavors === 'string' ? product.flavors.split(',').map(s => s.trim()).filter(Boolean) : [])) : [];
+  const hasFlavors = flavors.length > 0;
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -144,11 +149,11 @@ const ProductDetail = () => {
 
             {/* Specs & Flavors */}
             <div className="space-y-8 mb-10">
-              {product.flavors && product.flavors.length > 0 && (
+              {hasFlavors && (
                 <motion.div variants={fadeIn}>
                   <label className="block text-xs font-black uppercase tracking-[0.2em] text-outline mb-4">{t('product.selectFlavor') || 'Select Flavor / اختر النكهة'}</label>
                   <div className={`flex flex-wrap gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                    {product.flavors.map((flavor) => (
+                    {flavors.map((flavor) => (
                       <button 
                         key={flavor}
                         onClick={() => setSelectedFlavor(flavor)}
@@ -167,17 +172,17 @@ const ProductDetail = () => {
             {/* CTA */}
             <motion.button 
               variants={fadeIn}
-              whileHover={selectedFlavor || (product.flavors && product.flavors.length === 0) ? { scale: 1.02 } : {}}
-              whileTap={selectedFlavor || (product.flavors && product.flavors.length === 0) ? { scale: 0.98 } : {}}
+              whileHover={selectedFlavor || !hasFlavors ? { scale: 1.02 } : {}}
+              whileTap={selectedFlavor || !hasFlavors ? { scale: 0.98 } : {}}
               onClick={() => {
-                if (product.flavors && product.flavors.length > 0 && !selectedFlavor) {
+                if (hasFlavors && !selectedFlavor) {
                   alert(t('product.selectFlavor') || 'Please select a flavor');
                   return;
                 }
                 addToCart({ ...product, flavor: selectedFlavor });
               }}
               className={`w-full py-6 rounded-xl font-black uppercase text-xl tracking-tighter italic flex items-center justify-center gap-3 transition-all group shadow-[0_20px_50px_rgba(244,255,198,0.2)] ${isRTL ? 'flex-row-reverse' : ''} ${
-                (product.flavors && product.flavors.length > 0 && !selectedFlavor) 
+                (hasFlavors && !selectedFlavor) 
                 ? 'bg-gray-100 text-on-surface-variant cursor-not-allowed grayscale border border-gray-100' 
                 : 'bg-primary text-on-primary'
               }`}
