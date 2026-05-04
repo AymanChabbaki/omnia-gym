@@ -18,7 +18,7 @@ const Home = () => {
     '/1.jpeg',
     '/2.jpeg',
     '/3.jpeg',
-    '/4.jpeg',
+    '/4.jpeg'
   ];
   const [currentHero, setCurrentHero] = useState(0);
 
