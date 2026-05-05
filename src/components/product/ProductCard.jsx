@@ -165,6 +165,8 @@ const ProductCard = ({ product }) => {
           </motion.h3>
         </Link>
         
+
+        
         <div className={`mt-auto mb-6 flex flex-col gap-1 ${isRTL ? 'items-end' : 'items-start'}`}>
           {hasDiscount && (
             <span className="text-xs text-gray-300 line-through font-bold">
