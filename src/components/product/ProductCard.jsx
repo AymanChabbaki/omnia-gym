@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../store/LanguageContext';
 import { useCart } from '../../store/CartContext';
 import { Link } from 'react-router-dom';
-import { Eye, ShoppingCart, Plus } from 'lucide-react';
+import { Eye, ShoppingCart, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const { getLocalized, isRTL } = useLanguage();
   const [selectedFlavor, setSelectedFlavor] = useState('');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const scrollRef = useRef(null);
 
   if (!product) return null;
 
@@ -22,12 +24,9 @@ const ProductCard = ({ product }) => {
   const hasDiscount = rawOriginalPrice > 0 && rawOriginalPrice > rawPrice;
   const productName = getLocalized(product, 'name') || product.name || '';
   
-  let productImage = '/placeholder.png';
-  if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-    productImage = product.images[0];
-  } else if (product.image) {
-    productImage = product.image;
-  }
+  const images = product.images && Array.isArray(product.images) && product.images.length > 0
+    ? product.images
+    : [product.image || '/placeholder.png'];
   
   const tags = Array.isArray(product.tags) ? product.tags : [];
 
@@ -42,6 +41,24 @@ const ProductCard = ({ product }) => {
       return;
     }
     addToCart({ ...product, flavor: selectedFlavor });
+  };
+
+  const handleScroll = (e) => {
+    const scrollPosition = e.target.scrollLeft;
+    const width = e.target.offsetWidth;
+    const newIndex = Math.round(scrollPosition / width);
+    if (newIndex !== currentImageIndex) {
+      setCurrentImageIndex(newIndex);
+    }
+  };
+
+  const scrollToIndex = (index) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        left: index * scrollRef.current.offsetWidth,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
@@ -61,19 +78,62 @@ const ProductCard = ({ product }) => {
       }}
     >
       {/* Image Section */}
-      <div className="card-image aspect-square relative p-6 bg-white overflow-hidden flex items-center justify-center">
-        <Link to={`/product/${product.id}`} className="block w-full h-full">
-          <motion.img 
-            className="w-full h-full object-contain" 
-            variants={{
-              hover: { scale: 1.1 }
-            }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            src={productImage} 
-            alt={productName} 
-            onError={(e) => { e.target.src = 'https://proteinhouse-offers.com/wp-content/uploads/woocommerce-placeholder.png'; }}
-          />
-        </Link>
+      <div className="card-image aspect-square relative bg-white overflow-hidden flex items-center justify-center group/image">
+        {/* Scrollable Container */}
+        <div 
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth"
+        >
+          {images.map((img, idx) => (
+            <div key={idx} className="w-full h-full flex-shrink-0 snap-center p-6 flex items-center justify-center">
+              <Link to={`/product/${product.id}`} className="block w-full h-full">
+                <motion.img 
+                  className="w-full h-full object-contain" 
+                  variants={{
+                    hover: { scale: 1.1 }
+                  }}
+                  transition={{ duration: 0.7, ease: "easeOut" }}
+                  src={img} 
+                  alt={`${productName} - ${idx + 1}`} 
+                  onError={(e) => { e.target.src = 'https://proteinhouse-offers.com/wp-content/uploads/woocommerce-placeholder.png'; }}
+                />
+              </Link>
+            </div>
+          ))}
+        </div>
+        
+        {/* Quick Navigation Dots */}
+        {images.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 pointer-events-none">
+            {images.map((_, i) => (
+              <div 
+                key={i} 
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  currentImageIndex === i ? 'bg-primary w-4' : 'bg-gray-300'
+                }`} 
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Navigation Arrows - Visible on hover */}
+        {images.length > 1 && (
+          <>
+            <button 
+              onClick={(e) => { e.preventDefault(); scrollToIndex(currentImageIndex - 1); }}
+              className={`absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-full text-secondary shadow-sm opacity-0 group-hover/image:opacity-100 transition-all hover:bg-primary hover:text-white z-20 ${currentImageIndex === 0 ? 'pointer-events-none !opacity-0' : ''}`}
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button 
+              onClick={(e) => { e.preventDefault(); scrollToIndex(currentImageIndex + 1); }}
+              className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-full text-secondary shadow-sm opacity-0 group-hover/image:opacity-100 transition-all hover:bg-primary hover:text-white z-20 ${currentImageIndex === images.length - 1 ? 'pointer-events-none !opacity-0' : ''}`}
+            >
+              <ChevronRight size={16} />
+            </button>
+          </>
+        )}
         
         <div className={`absolute top-4 ${isRTL ? 'right-4' : 'left-4'} flex flex-col gap-2 z-20`}>
           {isOutOfStock && (

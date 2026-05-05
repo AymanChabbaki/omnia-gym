@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { fetchProductById } from '../services/api';
 import { useCart } from '../store/CartContext';
 import { useLanguage } from '../store/LanguageContext';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -13,6 +14,8 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedFlavor, setSelectedFlavor] = useState('');
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const mainScrollRef = useRef(null);
   
   const flavors = product ? (Array.isArray(product.flavors) 
     ? product.flavors.filter(f => typeof f === 'string' && f.trim() !== '') 
@@ -25,8 +28,6 @@ const ProductDetail = () => {
       try {
         const data = await fetchProductById(id);
         setProduct(data);
-        // Do not auto-select flavor to force user selection
-        // if (data.flavors && data.flavors.length > 0) setSelectedFlavor(data.flavors[0]);
       } catch (err) {
         console.error("Failed to load product", err);
       } finally {
@@ -35,6 +36,24 @@ const ProductDetail = () => {
     };
     loadProduct();
   }, [id]);
+
+  const handleMainScroll = (e) => {
+    const scrollPosition = e.target.scrollLeft;
+    const width = e.target.offsetWidth;
+    const newIndex = Math.round(scrollPosition / width);
+    if (newIndex !== currentImageIndex) {
+      setCurrentImageIndex(newIndex);
+    }
+  };
+
+  const scrollToIndex = (index) => {
+    if (mainScrollRef.current) {
+      mainScrollRef.current.scrollTo({
+        left: index * mainScrollRef.current.offsetWidth,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
@@ -52,6 +71,10 @@ const ProductDetail = () => {
       </main>
     );
   }
+
+  const images = product.images && Array.isArray(product.images) && product.images.length > 0
+    ? product.images
+    : [product.image || '/placeholder.png'];
 
   return (
     <main className="pt-32 pb-32 overflow-hidden">
@@ -78,34 +101,84 @@ const ProductDetail = () => {
             transition={{ duration: 0.8 }}
             className={`lg:col-span-7 grid grid-cols-12 gap-4 ${isRTL ? 'order-last lg:order-none' : ''}`}
           >
-            <div className="col-span-12 relative overflow-hidden rounded-xl aspect-[4/5] bg-white border border-gray-100">
-              <motion.img 
-                initial={{ scale: 1.2 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 1.5 }}
-                className="w-full h-full object-contain p-8" /* Upgraded to object-contain for multi-ratio DB strings */ 
-                src={product.images ? product.images[0] : '/placeholder.png'} 
-                alt={getLocalized(product, 'name')} 
-              />
-              <div className={`absolute top-6 ${isRTL ? 'right-6' : 'left-6'} flex flex-col gap-2`}>
+            <div className="col-span-12 relative overflow-hidden rounded-3xl aspect-square md:aspect-[4/5] bg-white border border-gray-100 group/main-image">
+              {/* Main Slider */}
+              <div 
+                ref={mainScrollRef}
+                onScroll={handleMainScroll}
+                className="flex w-full h-full overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth"
+              >
+                {images.map((img, idx) => (
+                  <div key={idx} className="w-full h-full flex-shrink-0 snap-center p-8 flex items-center justify-center">
+                    <motion.img 
+                      initial={{ scale: 1.1, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.5 }}
+                      className="w-full h-full object-contain"
+                      src={img} 
+                      alt={`${getLocalized(product, 'name')} - ${idx + 1}`} 
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Navigation Arrows */}
+              {images.length > 1 && (
+                <>
+                  <button 
+                    onClick={() => scrollToIndex(currentImageIndex - 1)}
+                    className={`absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-md rounded-full text-secondary shadow-xl transition-all hover:bg-primary hover:text-white z-20 ${currentImageIndex === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button 
+                    onClick={() => scrollToIndex(currentImageIndex + 1)}
+                    className={`absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-md rounded-full text-secondary shadow-xl transition-all hover:bg-primary hover:text-white z-20 ${currentImageIndex === images.length - 1 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                </>
+              )}
+
+              {/* Status Badges */}
+              <div className={`absolute top-6 ${isRTL ? 'right-6' : 'left-6'} flex flex-col gap-2 z-20`}>
                 <span className="bg-primary text-on-primary px-3 py-1 rounded font-black text-xs uppercase tracking-tighter italic">{t('product.bestSeller')}</span>
                 <span className="bg-secondary text-on-secondary px-3 py-1 rounded font-black text-xs uppercase tracking-tighter italic">{t('product.verifiedPure')}</span>
               </div>
+
+              {/* Dots for Mobile */}
+              {images.length > 1 && (
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20 md:hidden">
+                  {images.map((_, i) => (
+                    <div 
+                      key={i} 
+                      className={`h-1.5 rounded-full transition-all duration-300 ${currentImageIndex === i ? 'bg-primary w-6' : 'bg-gray-300 w-1.5'}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
+
             {/* Dynamic Gallery Thumbs */}
-            {product.images && product.images.map((img, i) => (
-              <motion.div 
-                key={i} 
-                whileHover={{ scale: 1.05 }}
-                className="col-span-4 rounded-xl overflow-hidden aspect-square bg-white border border-gray-100 cursor-pointer p-4"
-              >
-                <img 
-                  className="w-full h-full object-contain" 
-                  src={img} 
-                  alt={`${getLocalized(product, 'name')} gallery ${i}`} 
-                />
-              </motion.div>
-            ))}
+            <div className="col-span-12 grid grid-cols-5 gap-4">
+              {images.length > 1 && images.map((img, i) => (
+                <motion.div 
+                  key={i} 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => scrollToIndex(i)}
+                  className={`rounded-2xl overflow-hidden aspect-square bg-white border-2 cursor-pointer p-2 transition-all ${
+                    currentImageIndex === i ? 'border-primary shadow-lg shadow-primary/10' : 'border-gray-100 grayscale hover:grayscale-0'
+                  }`}
+                >
+                  <img 
+                    className="w-full h-full object-contain" 
+                    src={img} 
+                    alt={`${getLocalized(product, 'name')} thumbnail ${i}`} 
+                  />
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
 
           <motion.div 
